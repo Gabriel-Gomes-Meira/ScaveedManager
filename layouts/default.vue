@@ -8,20 +8,52 @@
       absolute
     >
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
+        <template 
+        v-for="(item, i) in items"
         >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+          <v-list-item  
+            v-if="item.to"                      
+            :key="'list'+i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item-group
+            no-action
+            sub-group
+            v-else
+            :key="'listgroup'+i"                                    
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>{{item.title}}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+
+            <v-list-item  
+              v-for="(subitem,s) in item.subitems"
+              :key="'list-sub'+s"
+              :to="item.to"
+              router
+              exact
+            >
+              <v-list-item-action>
+                <v-icon>{{ subitem.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="subitem.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>          
+        </template>        
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -79,12 +111,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer
+    <!-- <v-footer
       :absolute="!fixed"
       app
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
