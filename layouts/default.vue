@@ -1,100 +1,71 @@
 <template>
   <v-app dark>
+    <!-- :mini-variant="miniVariant" -->
+    <!-- :clipped="clipped"       -->
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"      
       app
       absolute
-    >
-      <v-list>
-        <template 
-        v-for="(item, i) in items"
+    >    
+      <v-list>        
+        <v-list-item  
+          v-for="(item, i) in items"
+          :key="'list'+i"
+          :to="item.to"
+          router
+          exact
         >
-          <v-list-item  
-            v-if="item.to"                      
-            :key="'list'+i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item-group
-            no-action
-            sub-group
-            v-else
-            :key="'listgroup'+i"                                    
-          >
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title>{{item.title}}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-
-            <v-list-item  
-              v-for="(subitem,s) in item.subitems"
-              :key="'list-sub'+s"
-              :to="item.to"
-              router
-              exact
-            >
-              <v-list-item-action>
-                <v-icon>{{ subitem.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title v-text="subitem.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>          
-        </template>        
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>                        
       </v-list>
     </v-navigation-drawer>
+
     <v-app-bar
       :clipped-left="clipped"
       fixed
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
+      <!-- <v-btn
         icon
         @click.stop="miniVariant = !miniVariant"
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
+      </v-btn> -->
+      <!-- <v-btn
         icon
         @click.stop="clipped = !clipped"
       >
         <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
+      </v-btn> -->
+      <!-- <v-btn
         icon
         @click.stop="fixed = !fixed"
       >
         <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn
+      </v-btn> -->
+      <v-spacer></v-spacer>
+      <v-toolbar-title v-text="title" 
+      class="text-h4"/>
+      <!-- <v-spacer /> -->
+      <!-- <v-btn
         icon
         @click.stop="rightDrawer = !rightDrawer"
       >
         <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-app-bar>
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="rightDrawer"
       :right="right"
       temporary
@@ -110,7 +81,7 @@
           <v-list-item-title>Switch drawer (click me)</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <!-- <v-footer
       :absolute="!fixed"
       app
@@ -123,27 +94,25 @@
 <script>
 export default {
   name: 'DefaultLayout',
+  
   data () {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
+      title: "Scavued",
       items: [
         {
           icon: 'mdi-apps',
           title: 'News',
           to: '/'
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sites',
-          to: '/sites'
+        {          
+          title: 'Sites',   
+          icon: 'mdi-sitemap',
+          to: '/sites/',          
         }
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
     }
   }
 }
