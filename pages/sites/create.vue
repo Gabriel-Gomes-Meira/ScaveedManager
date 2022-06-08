@@ -72,17 +72,23 @@ export default {
         nameRules: [v => !!v || "Name is required", 
                     v => (v && v.length <= 150) || "Name must be less than 150 characters"],
         url: "",
-        urlRules: [v => !!v || "E-mail is required", v => /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/.test(v) || "E-mail must be valid"],                
+        urlRules: [v => !!v || "URL is required", v => /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(v) || "URL must be valid"],                
     }),
 
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
                 // Native form submission is not yet supported
-                axios.post("/api/submit", {
-                    name: this.name,
-                    url: this.url,                    
-                });
+                this.$axios.post("/sites/", {
+                    site:{
+                        name: this.name,
+                        url: this.url,                    
+                    }
+                }).then(response => {
+                    // TODO
+                    // implementar mensagem de criado com sucesso
+                    this.$router.back()
+                })
             }
         },
         clear() {

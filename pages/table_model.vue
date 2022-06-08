@@ -42,7 +42,12 @@
             <template slot="no-data">
                 Não há registro de {{Model}} cadastrado!
             </template>
-            <template v-slot:[`item.actions`]="{ item }">
+            <template v-slot:[`item.url`]="{ item }">
+                <div class="text-truncate" style="width: 450px">
+                {{ item.url }}
+                </div>
+            </template>
+            <template v-slot:[`item._id`]="{ item }">
                 <v-btn 
                 text
                 class="mr-2 primary">
@@ -90,5 +95,9 @@ export default {
     },    
     methods: {      
     },
+
+    mounted(){
+        // console.log(this.$props.Data)
+    }
 }
 </script>
