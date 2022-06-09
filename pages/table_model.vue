@@ -42,27 +42,33 @@
             <template slot="no-data">
                 Não há registro de {{Model}} cadastrado!
             </template>
-            <template v-slot:[`item.url`]="{ item }">
-                <div class="text-truncate" style="width: 450px">
-                {{ item.url }}
+
+            <template v-slot:[`item.${key}`]="{ item }"
+            v-for="(key,i) in LongItems"
+            >
+                <div class="text-truncate" style="width: 450px" :key="'tt'+i">
+                {{ item[key] }}
                 </div>
             </template>
+
             <template v-slot:[`item._id`]="{ item }">
                 <v-btn 
                 text
+                @click="setUpdatingItem(item)"
                 class="mr-2 primary">
+                    <!-- @mouseenter="SelectedItem = item" -->
                     <v-icon
                         small                        
-                        @mouseenter="SelectedItem = item"
                     >
                         mdi-pencil
                     </v-icon>
                 </v-btn>
+                <!-- @mouseenter="SelectedItem = item" -->
                 <v-btn
                 class="red"
                 text
                 dark
-                @mouseenter="SelectedItem = item"
+                @click="setUpdatingItem(item)"
                 >
                     <v-icon>
                         mdi-delete
@@ -77,23 +83,32 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex"
 
 export default {    
+
     name:"TableModel",
+
     props:{
         Model:String,
         Data:null,
         Headers:null,
         ViewCreate: String,
+        LongItems: []
     },
+    
     data () {
         return {        
             SwitchSearch: false,
             search:'',
-            SelectedItem:null,            
+            // SelectedItem:null,            
         }
     },    
+
     methods: {      
+        ...mapMutations({
+            setUpdatingItem:"setUpdatingItem"
+        })
     },
 
     mounted(){

@@ -3,7 +3,8 @@
   :Data="Data"
   :Headers="Headers"
   :Model="'Site'"
-  :ViewCreate="'/sites/create'"></table-model>
+  :ViewCreate="'/sites/create'"
+  :LongItems="['url']"></table-model>
 </template>
 
 <script>
@@ -33,8 +34,12 @@ export default {
     },
 
     created(){
+        // TODO
+        // loading init
         this.$axios.get('/sites/').then(response => {
             this.Data = response.data
+            // TODO
+            // loading end
         })
     }
 
