@@ -55,6 +55,7 @@
                 <v-btn 
                 text
                 @click="setUpdatingItem(item)"
+                :to="ViewCreate"
                 class="mr-2 primary">
                     <!-- @mouseenter="SelectedItem = item" -->
                     <v-icon
@@ -77,7 +78,9 @@
             </template>
         </v-data-table>
 
+        <Destroyer 
         
+        />
     </v-container>
 
 </template>
@@ -85,34 +88,33 @@
 <script>
 import {mapMutations} from "vuex"
 
-export default {    
+import Destroyer from "./destroyer.vue"
 
-    name:"TableModel",
-
-    props:{
-        Model:String,
-        Data:null,
-        Headers:null,
+export default {
+    name: "TableModel",
+    props: {
+        Model: String,
+        Data: null,
+        Headers: null,
         ViewCreate: String,
-        LongItems: []
+        LongItems: [],
+        MainAtt: ""
     },
-    
-    data () {
-        return {        
+    data() {
+        return {
             SwitchSearch: false,
-            search:'',
+            search: "",
             // SelectedItem:null,            
-        }
-    },    
-
-    methods: {      
+        };
+    },
+    methods: {
         ...mapMutations({
-            setUpdatingItem:"setUpdatingItem"
+            setUpdatingItem: "setUpdatingItem"
         })
     },
-
-    mounted(){
+    mounted() {
         // console.log(this.$props.Data)
-    }
+    },
+    components: { Destroyer }
 }
 </script>

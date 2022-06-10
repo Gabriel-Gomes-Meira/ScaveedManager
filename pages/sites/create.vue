@@ -63,7 +63,7 @@
         
 
 <script>
-import axios from "axios";
+import {mapGetters} from "vuex"
 
 export default {
     data: () => ({
@@ -78,22 +78,53 @@ export default {
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
-                // Native form submission is not yet supported
-                this.$axios.post("/sites/", {
-                    site:{
-                        name: this.name,
-                        url: this.url,                    
-                    }
-                }).then(response => {
-                    // TODO
-                    // implementar mensagem de criado com sucesso
-                    this.$router.back()
-                })
+                if (!this.getUpdatingItem){
+                    this.$axios.post("/sites/", {
+                        site:{
+                            name: this.name,
+                            url: this.url,                    
+                        }
+                    }).then(response => {
+                        // TODO
+                        // implementar mensagem de criado com sucesso
+                        this.$router.back()
+                    })
+
+                } else {
+                    this.$axios.put(`/sites/${this.getUpdatingItem._id.$oid}`, {
+                        site:{
+                            name: this.name,
+                            url: this.url,                    
+                        }
+                    }).then(response => {
+                        // TODO
+                        // implementar mensagem de criado com sucesso
+                        this.$router.back()
+                    })
+                }
             }
         },
         clear() {
             this.$refs.form.reset();
         }
+    },
+
+    computed:{
+        ...mapGetters([
+            'getUpdatingItem'
+        ])
+    },
+
+    created(){
+        // console.log(this.$store.state)
+        if(this.getUpdatingItem){
+            this.name = this.getUpdatingItem.name
+            this.url = this.getUpdatingItem.url
+        }
+    },
+
+    mounted(){
+        // console.log(this.getUpdatingItem)
     }
 };
 </script>
