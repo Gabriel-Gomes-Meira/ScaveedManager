@@ -4,11 +4,11 @@
         <v-dialog v-model="active" 
         persistent 
         max-width="290" 
-        light>
+        >
             <v-card>
                 <v-card-title class="headline">Confirmação</v-card-title>
                 <v-card-text>Você tem certeza de que deseja deletar: "
-                    <b>{{Item[MainProp]}}</b>" ?!</v-card-text>
+                    <b>{{human_indetification}}</b>" ?!</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="info"  @click.native="Sumir" text>Recusar</v-btn>
@@ -27,13 +27,23 @@ export default {
         MainProp:String,
         Item:null,
     },
+
+    computed:{
+        human_indetification(){
+            if(this.Item && this.Item[this.MainProp]){
+                return this.Item[this.MainProp]
+            }
+            return "..."
+        }
+    },
+
     methods:{
         Sumir () {
             this.$emit('Closethis')
         },
 
         Aceito () {
-            this.$emit('SendRequest', [this.Item,'/delete'] );
+            this.$emit('SendRequest');
             this.Sumir();
         }
     }

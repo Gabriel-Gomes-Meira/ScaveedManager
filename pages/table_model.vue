@@ -54,22 +54,19 @@
             <template v-slot:[`item._id`]="{ item }">
                 <v-btn 
                 text
-                @click="setUpdatingItem(item)"
-                :to="ViewCreate"
-                class="mr-2 primary">
-                    <!-- @mouseenter="SelectedItem = item" -->
+                @click="update(item)"                
+                class="mr-2 primary">                    
                     <v-icon
                         small                        
                     >
                         mdi-pencil
                     </v-icon>
-                </v-btn>
-                <!-- @mouseenter="SelectedItem = item" -->
+                </v-btn>                
                 <v-btn
                 class="red"
                 text
                 dark
-                @click="setUpdatingItem(item)"
+                @click="deletingItem = item"
                 >
                     <v-icon>
                         mdi-delete
@@ -79,7 +76,11 @@
         </v-data-table>
 
         <Destroyer 
-        
+        :active="!!deletingItem"
+        :Item="deletingItem"
+        :MainProp="MainAtt"
+        @Closethis="deletingItem = null"
+        @SendRequest="destroy()"
         />
     </v-container>
 
@@ -87,34 +88,53 @@
 
 <script>
 import {mapMutations} from "vuex"
-
 import Destroyer from "./destroyer.vue"
 
 export default {
     name: "TableModel",
+    
     props: {
         Model: String,
         Data: null,
         Headers: null,
         ViewCreate: String,
+        ModelApi:String,
         LongItems: [],
         MainAtt: ""
     },
+    
     data() {
         return {
             SwitchSearch: false,
             search: "",
-            // SelectedItem:null,            
+            deletingItem:null,            
         };
-    },
+    },    
+    
     methods: {
         ...mapMutations({
             setUpdatingItem: "setUpdatingItem"
-        })
+        }), 
+
+        destroy(){
+            this.$axios.delete(`${this.ModelApi}${this.deletingItem._id.$oid}`)
+                .then(() =>{
+                    this.deletingItem = null
+                })
+            // TODO
+            // Refresh page or exclude from array
+        },
+
+        update(item) {
+            this.setUpdatingItem(item)
+            this.$router.push(this.ViewCreate)
+        }
     },
-    mounted() {
-        // console.log(this.$props.Data)
+
+    created(){
+        this.setUpdatingItem(null)
     },
+    
     components: { Destroyer }
 }
 </script>

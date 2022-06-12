@@ -1,12 +1,12 @@
 <template>
-  <table-model 
+  <table-model  
   :Data="Data"
   :Headers="Headers"
-  :Model="'Site'"
-  :ViewCreate="'/sites/create'"
+  :Model="'Listen'"
+  :ViewCreate="'/listens/create'"
   :LongItems="['url']"
   :MainAtt="'name'"
-  :ModelApi="'/sites/'"></table-model>
+  :ModelApi="'/listens/'"></table-model>
 </template>
 
 <script>
@@ -23,6 +23,9 @@ export default {
             },{
                 text: "URL",
                 value: "url"
+            },{
+                text: "Site",
+                value: "site"
             },{
                 text: "Açoes",
                 value: "_id"
@@ -44,9 +47,15 @@ export default {
 
     created(){
         this.startLoading()
-        this.$axios.get('/sites/').then(response => {
+        this.$axios.get('/listens/').then(response => {
             this.Data = response.data
-            setTimeout(this.stopLoading, 750)            
+            this.$axios.get('/sites/').then(resp => {
+                this.Data.forEach(ele => {
+                    let match = resp.data.find(r => r._id.$oid == ele.site_id.$oid)
+                    ele["site"] = match.name                    
+                })
+                setTimeout(this.stopLoading, 750)            
+            })  
         })
     }
 
