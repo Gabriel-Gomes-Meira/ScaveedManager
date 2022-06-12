@@ -106,13 +106,11 @@ export default {
                         listen:{
                             name: this.name,
                             url: this.url,                    
+                            element_indentifier: this.indentifier
                         },
                         site: {
                             _id: this.selectedSite
-                        },
-                        item: {
-                            indentifier: this.indentifier
-                        }                        
+                        }
                     }).then(response => {
                         // TODO
                         // implementar mensagem de criado com sucesso
@@ -133,7 +131,7 @@ export default {
                         } 
                     }).then(response => {
                         // TODO
-                        // implementar mensagem de criado com sucesso
+                        // implementar mensagem de atualizado com sucesso
                         this.$router.back()
                     })
                 }

@@ -21,7 +21,8 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" 
+    app fixed>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <!-- <v-btn
         icon
@@ -51,7 +52,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn> -->
     </v-app-bar>
-    <v-main>
+    <v-main class="main-container">
       <v-container >
             <transition name="slide-y">                
                 <Nuxt
@@ -115,7 +116,11 @@ export default {
                 title: "Listens",
                 icon: "mdi-message-alert-outline",
                 to: "/listens/",
-            },
+            },{
+              title: "Notification Models",
+              icon: "mdi-email-newsletter",
+              to: "/notification_models/create"
+            }
             ],
         };
     },
