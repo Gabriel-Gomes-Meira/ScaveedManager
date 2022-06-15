@@ -20,12 +20,25 @@
                 size="38">mdi-arrow-left</v-icon>
             </v-btn> 
 
+            <v-text-field
+            class="pt-6 SearchDisable"
+            append-outer-icon="mdi-plus"
+            filled dense                        
+            v-model="currentItem"
+            :rules="ciRules"
+            placeholder="Webscrap's Item"
+            label="Items"                        
+            v-show="selectedType == 'telegram'"
+            max-width="50px"
+            > 
+            </v-text-field>
+
             <!-- :disabled="hasTitle" -->
             <v-btn
             @click="hasTitle = !hasTitle"
             class="mr-2"
             color="blue-grey darken-1"
-            v-show="selectedType">
+            v-show="selectedType == 'vue-card-model'">
                 TITLE
             </v-btn>    
 
@@ -34,14 +47,14 @@
             @click="hasBlockText = !hasBlockText"
             color="blue-grey darken-1"
             class="mr-2"
-            v-show="selectedType">
+            v-show="selectedType == 'vue-card-model'">
                 TEXT
             </v-btn>
 
             <v-btn
             @click="hasImage = !hasImage"
             color="blue-grey darken-1"
-            v-show="selectedType">
+            v-show="selectedType == 'vue-card-model'">
                 IMAGE
             </v-btn>
             
@@ -71,9 +84,13 @@
         <v-sheet color="blue-grey darken-4
         rounded-b-lg"
         height="400">
-                <v-row class="pt-8" >
-                    <transition name="slide-y">
+                <v-row class="pt-8" is="transition-group"
+                name="slide-y" 
+                
+                >
+                    <!-- <transition name="slide-y"> -->
                     <v-card 
+                    key="card_1"
                     class="mx-auto cols-4"
                     color="rgb(23, 22, 22)"
                     elevation="0"
@@ -100,12 +117,13 @@
                         <div>Text2</div>
                         </v-card-text>
                     </v-card>                
-                    </transition>
+                    <!-- </transition> -->
 
-                    <transition name="slide-y">
+                    <!-- <transition name="slide-y"> -->
                     <v-card
-                    class="mx-auto cols-4 blue-grey darken-5
-                    d-flex align-content-center justify-center"
+                    key="card_2"
+                    class="mx-auto cols-6 blue-grey lighten-2
+                    pa-1 rounded white"
                     width="400"
                     height="inherit"
                     elevation="0"
@@ -113,14 +131,30 @@
                             !selectedType"
                     @click="selectedType = 'telegram'"
                     >
-                        <v-icon
-                        
-                        size="200">telegram</v-icon>
+                        <v-card
+                        class="d-flex 
+                        align-content-center justify-center"
+                        elevation="0"
+                        style="height: 100%; width: inherit;">
+                            <v-icon 
+                            color="blue-grey lighten-3"
+                            size="200">telegram</v-icon>                            
+                        </v-card>                                                    
                     </v-card>                        
-                    </transition>
+                    <!-- </transition> -->
                 </v-row>            
+
+                <v-row v-show="selectedType"
+                >
+                    <v-text-field
+                    label="Mensagem"
+                    placeholder="Mensagem Formatada como HTML"
+                    textarea
+                    v-model="text"                    
+                    ></v-text-field>
+                </v-row>
         </v-sheet>
-        <v-text-field 
+        <!-- <v-text-field 
         label="Title"
         v-show="hasTitle"
         v-model="title"
@@ -130,7 +164,7 @@
         label="Message Text"
         v-show="hasBlockText"
         v-model="text"
-        />
+        /> -->
     </v-container>
 
 </template>
