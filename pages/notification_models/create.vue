@@ -11,14 +11,6 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
-            <v-btn
-            @click="selectedType = ''"
-            class="mr-2"
-            color="blue-grey darken-1"
-            v-show="selectedType">
-                <v-icon
-                size="38">mdi-arrow-left</v-icon>
-            </v-btn> 
 
             <v-text-field
             class="pt-6 SearchDisable"
@@ -83,10 +75,14 @@
         
         <v-sheet color="blue-grey darken-4
         rounded-b-lg"
-        height="400">
-                <v-row class="pt-8" is="transition-group"
-                name="slide-y" 
-                
+        min-height="400">
+            <v-container is="transition-group"
+            name="slide-y"
+            class="pt-0 fill-height" 
+            >
+                <v-row class="pt-8"                 
+                key="row_1"
+                v-show="!selectedType"
                 >
                     <!-- <transition name="slide-y"> -->
                     <v-card 
@@ -95,8 +91,7 @@
                     color="rgb(23, 22, 22)"
                     elevation="0"
                     max-width="400"
-                    v-show="selectedType == 'vue-card-model' || 
-                            !selectedType"
+                    
                     @click="selectedType='vue-card-model'"
                     >
                         <v-img
@@ -126,9 +121,7 @@
                     pa-1 rounded white"
                     width="400"
                     height="inherit"
-                    elevation="0"
-                    v-show="selectedType == 'telegram' || 
-                            !selectedType"
+                    elevation="0"                    
                     @click="selectedType = 'telegram'"
                     >
                         <v-card
@@ -145,31 +138,31 @@
                 </v-row>            
 
                 <v-row v-show="selectedType"
+                class="justify-center mt-0"
+                key="row_2"
+                style="height:inherit"
                 >
-                    <v-text-field
-                    label="Mensagem"
-                    placeholder="Mensagem Formatada como HTML"
-                    textarea
-                    v-model="text"                    
-                    ></v-text-field>
+                    <telegram 
+                    v-if="selectedType == 'telegram'"
+                    @UnChoosed="selectedType = ''"
+                    />
                 </v-row>
+            </v-container>
         </v-sheet>
         <!-- <v-text-field 
         label="Title"
         v-show="hasTitle"
         v-model="title"
-        />
-
-        <v-textarea 
-        label="Message Text"
-        v-show="hasBlockText"
-        v-model="text"
         /> -->
+
+        
     </v-container>
 
 </template>
 
 <script>
+import telegram from "./telegram.vue"
+
 export default {    
     name:"NotificationModelMaker",
 
@@ -184,6 +177,10 @@ export default {
             text:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa quisquam obcaecati commodi iste voluptatum amet. Obcaecati ab nesciunt tenetur adipisci, impedit culpa? Magni quibusdam doloribus officia suscipit amet iure culpa.",
             selectedType:""
         }
+    },
+
+    components:{
+        telegram
     }
 }
 </script>
