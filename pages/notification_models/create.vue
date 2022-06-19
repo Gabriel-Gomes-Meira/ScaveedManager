@@ -1,6 +1,5 @@
 <template>
-    <v-container 
-    class="pa-12"    
+    <v-container    
     >
         <v-toolbar
         color="blue-grey darken-3"
@@ -11,13 +10,13 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
+            <!-- v-model="currentItem"
+            :rules="ciRules" -->
 
             <v-text-field
             class="pt-6 SearchDisable"
             append-outer-icon="mdi-plus"
             filled dense                        
-            v-model="currentItem"
-            :rules="ciRules"
             placeholder="Webscrap's Item"
             label="Items"                        
             v-show="selectedType == 'telegram'"
@@ -50,37 +49,17 @@
                 IMAGE
             </v-btn>
             
-        </v-toolbar>
-
-        <!-- <v-card height="400">             
-            
-            <v-card-title v-show="hasTitle">
-                {{title}}
-            </v-card-title>
-            
-            <v-card-text v-show="hasBlockText">
-                {{text}}
-            </v-card-text>
-            <v-img
-            class="grey darken-2 align-end"
-            height="200px"
-            v-show="hasImage"
-            >
-                <v-card-title
-                v-show="hasImage && hasTitle">
-                    {{title}}
-                </v-card-title>
-            </v-img>
-        </v-card> -->
+        </v-toolbar>        
         
         <v-sheet color="blue-grey darken-4
         rounded-b-lg"
-        min-height="400">
+        min-height="100"
+        max-height="400">
             <v-container is="transition-group"
             name="slide-y"
             class="pt-0 fill-height" 
             >
-                <v-row class="pt-8"                 
+                <v-row class="pt-8 mb-6"                 
                 key="row_1"
                 v-show="!selectedType"
                 >
@@ -138,7 +117,8 @@
                 </v-row>            
 
                 <v-row v-show="selectedType"
-                class="justify-center mt-0"
+                class="justify-center mt-0
+                mb-4"
                 key="row_2"
                 style="height:inherit"
                 >
@@ -148,14 +128,7 @@
                     />
                 </v-row>
             </v-container>
-        </v-sheet>
-        <!-- <v-text-field 
-        label="Title"
-        v-show="hasTitle"
-        v-model="title"
-        /> -->
-
-        
+        </v-sheet>                
     </v-container>
 
 </template>
@@ -168,7 +141,7 @@ export default {
 
     data() {
         return {
-            items:[],
+            // items:[],
             hasTitle:false,
             title:"A Big Title",
             hasImage:false,
@@ -196,12 +169,12 @@ export default {
     }
     .main-container::-webkit-scrollbar-track{
         
-        background-color: #80cbc39e;
+        background-color: transparent;
         border-radius: 4px;
     }
     .main-container::-webkit-scrollbar-thumb{
-        background: #26a094de;
-        border: solid #e0f2f127;
+        background: #263238;
+        /* border: solid #e0f2f127; */
         border-radius: 4px;
     }
 

@@ -21,7 +21,8 @@
     </v-navigation-drawer>
 
     <v-app-bar :clipped-left="clipped" 
-    app fixed>
+    app style="position: inherit"
+    max-height="60px">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       
       <v-spacer></v-spacer>
@@ -29,7 +30,7 @@
       
     </v-app-bar>
     <v-main class="main-container">
-      <v-container >
+      <v-container>
             <transition name="slide-y">                
                 <Nuxt
                 v-show="!loading"/>                            
