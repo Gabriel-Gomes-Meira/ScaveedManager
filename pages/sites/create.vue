@@ -98,7 +98,7 @@ export default {
                         }
                     }).then(response => {
                         // TODO
-                        // implementar mensagem de criado com sucesso
+                        // implementar mensagem de atualizado com sucesso
                         this.$router.back()
                     })
                 }

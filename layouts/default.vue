@@ -73,7 +73,7 @@ export default {
             },{
               title: "Notification Models",
               icon: "mdi-email-newsletter",
-              to: "/notification_models/create"
+              to: "/notification_models/"
             }
             ],
         };

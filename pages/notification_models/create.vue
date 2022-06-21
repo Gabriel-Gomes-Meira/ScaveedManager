@@ -9,45 +9,6 @@
                 Modelo de Notificação
             </v-toolbar-title>
             <v-spacer></v-spacer>
-
-            <!-- v-model="currentItem"
-            :rules="ciRules" -->
-
-            <v-text-field
-            class="pt-6 SearchDisable"
-            append-outer-icon="mdi-plus"
-            filled dense                        
-            placeholder="Webscrap's Item"
-            label="Items"                        
-            v-show="selectedType == 'telegram'"
-            max-width="50px"
-            > 
-            </v-text-field>
-
-            <!-- :disabled="hasTitle" -->
-            <v-btn
-            @click="hasTitle = !hasTitle"
-            class="mr-2"
-            color="blue-grey darken-1"
-            v-show="selectedType == 'vue-card-model'">
-                TITLE
-            </v-btn>    
-
-            <!-- :disabled="hasBlockText" -->
-            <v-btn
-            @click="hasBlockText = !hasBlockText"
-            color="blue-grey darken-1"
-            class="mr-2"
-            v-show="selectedType == 'vue-card-model'">
-                TEXT
-            </v-btn>
-
-            <v-btn
-            @click="hasImage = !hasImage"
-            color="blue-grey darken-1"
-            v-show="selectedType == 'vue-card-model'">
-                IMAGE
-            </v-btn>
             
         </v-toolbar>        
         
@@ -123,7 +84,12 @@
                 style="height:inherit"
                 >
                     <telegram 
-                    v-if="selectedType == 'telegram'"
+                    v-show="selectedType == 'telegram'"
+                    @UnChoosed="selectedType = ''"
+                    />
+
+                    <defaultcardmodel 
+                    v-show="selectedType == 'vue-card-model'"
                     @UnChoosed="selectedType = ''"
                     />
                 </v-row>
@@ -135,6 +101,7 @@
 
 <script>
 import telegram from "./telegram.vue"
+import defaultcardmodel from "./vuecardmodel.vue"
 
 export default {    
     name:"NotificationModelMaker",
@@ -153,8 +120,9 @@ export default {
     },
 
     components:{
-        telegram
-    }
+        telegram,
+        defaultcardmodel
+    },
 }
 </script>
 
@@ -193,7 +161,7 @@ export default {
     }
     .slide-y-enter, .slide-y-leave-active { 
         position: relative;        
-        animation: slideyr 0.8s;
+        animation: slideyr 0.0s;/* ou matenho todos componenetes na mesma row, ou reduzo o tempo de transiç~ao a zero */
         /* -webkit-animation: slideyr 0.8s;
         -moz-animation: slideyr 0.8s; */
     }
@@ -234,8 +202,8 @@ export default {
         }
         100% {
             opacity: 0; 
-            top:-50px;
-            z-index: -1;
+            top:-100px;
+            /* z-index: -1; */
         }
     }
 
@@ -246,7 +214,7 @@ export default {
         }
         100% { 
             opacity: 0; 
-            top:-50px;
+            /* top:-100px; */
             z-index: -1;
         }
     }

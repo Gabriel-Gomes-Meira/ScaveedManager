@@ -272,7 +272,19 @@ export default {
             }
 
             if(validated){
-                // submit
+                this.$axios.post("/notification_model/", {
+                  listen:{
+                    id:this.selectedListen
+                  },
+                  model:{
+                    message:this.text,
+                    wanted_items: this.wantedItems
+                  }
+                }).then(response => {
+                  // TODO
+                  // implementar mensagem de criado com sucesso
+                  this.$router.back()
+                })
             }
         },        
     },
