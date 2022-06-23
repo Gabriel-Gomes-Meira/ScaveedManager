@@ -1,5 +1,6 @@
 <template>  
-  <v-stepper v-model="step"
+  <v-stepper v-if="!updating"
+  v-model="step"  
   class="col-12 rounded-t-0 elevation-0
     blue-grey darken-4"
     height="100%"
@@ -75,12 +76,12 @@
         >
           <v-chip
             disabled
-            v-for="(name,index) in varNames"
-            :key="name+'_varname'"
+            v-for="(item,index) in wantedItems"
+            :key="item.var_name+'_varname'"
             :class="valids[index]?'green--text':'red--text'"
             class="font-weight-medium"            
           >
-            {{ name }}
+            {{ item.var_name }}
           </v-chip>
         </v-chip-group>        
                   
@@ -88,12 +89,12 @@
             <v-expansion-panels flat            
             class="rounded-lg col"            
             >
-            <v-expansion-panel v-for="(name, index) in varNames"
+            <v-expansion-panel v-for="(item, index) in wantedItems"
             :key="'input_'+index"
             :ref="'expansion_wi_'+index"
             class="blue-grey darken-3 elevation-0"
             >
-                <v-expansion-panel-header v-text="name" 
+                <v-expansion-panel-header v-text="item.var_name" 
                 class="font-weight-medium"/>
                 <v-expansion-panel-content
                 >                
@@ -103,7 +104,7 @@
                     <v-text-field
                     class="col-12"
                     label="URL"
-                    v-model="wantedItems[index]['url']"
+                    v-model="item['url']"
                     :rules="urlRules"
                     required
                     placeholder="https://......../"
@@ -112,7 +113,7 @@
                     <v-text-field
                     class="col-12"
                     label="Path"
-                    v-model="wantedItems[index]['path']"
+                    v-model="item['path']"
                     :rules="valueRules"
                     required
                     placeholder="Css Path, xpath ..."
@@ -121,7 +122,7 @@
                     <v-text-field
                     class="col-12"
                     label="Wanted Value"
-                    v-model="wantedItems[index]['wanted_value']"
+                    v-model="item['wanted_value']"
                     :rules="valueRules"
                     required
                     placeholder="src, inner_html, etc..."
@@ -130,7 +131,7 @@
                     
                     <v-checkbox
                     class="col-12"
-                    v-model="wantedItems[index]['distinguer']['is_last']"
+                    v-model="item['distinguer']['is_last']"
                     label="isLast"></v-checkbox>
 
                     <v-btn class="rounded-lg col-1"
@@ -204,10 +205,123 @@
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
+  <!-- 
+    A Estrategia, pelo menos por enquanto, usada para o componente de criaçao e update desse model, e de que para que o usuario tenha uma melhor experiencia quando for atualizar, ele n~ao precise passar pelos steps, como na criaçao, e inves disso, posso ir direto para a atualizacao, seja da mensagem ou dos itens.
+    No server side, um novo item pode ser criado tranquilamente, e um ja existente pode ser atualizado parcial ou totalmente.
+    Porem, em nenhum dos lados ocorre a validacao que um item nao esta mais sendo utilizado, afinal o usuario podera criar novos itens, e esquecer de usuar os ja criados, ou simplesmente apagar algum da mensagem.
+  -->
+  <v-card v-else
+  class="blue-grey darken-4 mt-2 col-10 elevation-0">
+
+    <v-row class="justify-space-between align-center" >
+      <v-chip-group class="elevation-0 col-6"
+        active-class="primary--text"
+        column
+      >
+        <v-chip
+          disabled
+          v-for="(item,index) in wantedItems"
+          :key="item.var_name+'_varname'"
+          :class="valids[index]?'green--text':'red--text'"
+          class="font-weight-medium"
+        >
+          {{ item.var_name }}
+        </v-chip>
+      </v-chip-group>
+  
+      <v-btn :color="editingText?'success':'primary'"
+      class="col-2"
+      @click="changeText">
+          {{editingText?'CHECK':'EDIT'}}
+      </v-btn>
+    </v-row>
+
+    <v-row class="my-2">
+      <!-- too -->
+      <v-textarea 
+      :disabled="editingText?false:true"
+      label="Message Text"
+      background-color="grey lighten-2"
+      light
+      color="blue-grey darken-4"
+      class=""        
+      v-model="text"
+      outlined
+      no-resize
+      rows="8"
+      >
+        <!-- <template v-slot:append-outer> -->
+          
+        <!-- </template> -->
+      </v-textarea>    
+    </v-row>
+
+    <v-row class="my-2">
+            <v-expansion-panels flat            
+            class="rounded-lg col ele"            
+            >
+            <v-expansion-panel v-for="(item, index) in wantedItems"
+            :key="'input_'+index"
+            :ref="'expansion_wi_'+index"
+            class="blue-grey darken-3 elevation-0"
+            >
+                <v-expansion-panel-header v-text="item.var_name" 
+                class="font-weight-medium"/>
+                <v-expansion-panel-content
+                >                
+                <v-form v-model="valids[index]" :ref="'wanted_item_form_'+index"
+                lazy-validation
+                class="row justify-end pb-2">                      
+                    <v-text-field
+                    class="col-12"
+                    label="URL"
+                    v-model="item['url']"
+                    :rules="urlRules"
+                    required
+                    placeholder="https://......../"
+                    ></v-text-field>
+
+                    <v-text-field
+                    class="col-12"
+                    label="Path"
+                    v-model="item['path']"
+                    :rules="valueRules"
+                    required
+                    placeholder="Css Path, xpath ..."
+                    ></v-text-field>
+                    
+                    <v-text-field
+                    class="col-12"
+                    label="Wanted Value"
+                    v-model="item['wanted_value']"
+                    :rules="valueRules"
+                    required
+                    placeholder="src, inner_html, etc..."
+                    ></v-text-field>
+
+                    
+                    <v-checkbox
+                    class="col-12"
+                    v-model="item['distinguer']['is_last']"
+                    label="isLast"></v-checkbox>
+
+                    <v-btn class="rounded-lg col-1"
+                    color="success"
+                    text
+                    @click="validateThat(index)">
+                    CHECK
+                    </v-btn>
+                </v-form>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+            </v-expansion-panels>
+    </v-row>
+  </v-card>
 </template>
 
 
 <script>
+import {mapGetters} from "vuex"
 export default {
     name:"MakerTelegramNotification",
 
@@ -216,14 +330,14 @@ export default {
             step:1,
             text:'',
             // splitedText:'',
-            varNames:[],
             wantedItems:[],
             valids:[],
             urlRules: [v => !!v || "URL is required", v => /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(v) || "URL must be valid"],
             valueRules: [v => !!v || "Value is required"],
             pathRules: [v => !!v || "Value is required"],
             Listens:[],
-            selectedListen:null
+            selectedListen:null,
+            editingText:false,
         }
     },
 
@@ -238,17 +352,23 @@ export default {
                 if (splitedText[index] == '$'){
                 delimiter = index           
                 varName.push(splitedText[index])     
-                } else if (delimiter>=0 && (index == splitedText.length-1 || splitedText[index] == ' '|| splitedText[index] == '\n' || splitedText[index] == '"')){
-                    this.varNames.push(varName.join(""))
-                    this.wantedItems.push({
-                        var_name: varName.join(""),
-                        url:'',
-                        distinguer:{
-                            is_last:true
-                        },
-                        path:'',
-                        wanted_value:''
-                    })
+                } else if (delimiter>=0 && (index == splitedText.length-1 || splitedText[index] == ' '|| splitedText[index] == '\n' || splitedText[index] == '"')){                    
+                  varName = varName.join("")
+                  let index = wanted_items.findIndex(wi => wi.var_name == varName.join(""))
+                  
+                    if (this.updating && this.getUpdatingItem.wanted_items.findIndex(wi => wi.var_name == varName.join("")) != -1){
+                      continue
+                    } else {
+                      // this.wantedItems.push({
+                      //     var_name: varName.join(""),
+                      //     url:'',
+                      //     distinguer:{
+                      //         is_last:true
+                      //     },
+                      //     path:'',
+                      //     wanted_value:''
+                      // })
+                    }           
                     varName = []
                     delimiter = -1
                 } else if (delimiter>=0) {
@@ -286,13 +406,34 @@ export default {
                   this.$router.back()
                 })
             }
-        },        
+        },
+        
+        changeText(){
+          if(this.editingText){
+            this.searchVarNames();
+          }         
+          this.editingText = !this.editingText;
+        }
+    },
+
+    computed:{
+      ...mapGetters([
+        'getUpdatingItem'
+      ]),
+      updating(){
+        return this.getUpdatingItem && this.getUpdatingItem.message
+      }
     },
 
     created(){
         this.$axios.get('/listens/').then(response => {
             this.Listens = response.data            
         })
+
+        if(this.getUpdatingItem){
+          this.text = this.getUpdatingItem.message
+          this.wantedItems = this.getUpdatingItem.wanted_items 
+        }
     }
 }
 </script>

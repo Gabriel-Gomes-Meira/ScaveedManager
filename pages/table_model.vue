@@ -21,7 +21,7 @@
             v-model="search"
             > 
             </v-text-field>
-            
+            <!-- trocar de to para @click, com funçao de limpar updating -->
             <v-btn 
             :to="ViewCreate"
             icon>
@@ -72,6 +72,10 @@
                         mdi-delete
                     </v-icon>
                 </v-btn>
+                <!-- 
+                    TODO 
+                    turn this slot implementable by component father.
+                -->
             </template>
         </v-data-table>
 

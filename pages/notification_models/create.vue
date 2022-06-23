@@ -10,12 +10,18 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             
+            <v-btn text
+            color="blue-grey lighten-4"
+            @click="$router.back()">
+                <v-icon
+                size="30">mdi-arrow-left</v-icon>
+            </v-btn>
         </v-toolbar>        
         
         <v-sheet color="blue-grey darken-4
         rounded-b-lg"
         min-height="100"
-        max-height="400">
+        max-height="100%">
             <v-container is="transition-group"
             name="slide-y"
             class="pt-0 fill-height" 
@@ -118,6 +124,10 @@ export default {
             selectedType:""
         }
     },
+
+    // TODO
+    // ON CREATE, IF UPDATE, USE THE ":TYPE" TO REDIRECT TO TELEGRAM OU VUE CARD MODEL ONCE TIME.
+    
 
     components:{
         telegram,
