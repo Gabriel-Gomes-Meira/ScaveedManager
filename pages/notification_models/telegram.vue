@@ -1,5 +1,5 @@
 <template>  
-  <v-stepper v-if="!updating"
+  <v-stepper v-if="!getUpdatingItem"
   v-model="step"  
   class="col-12 rounded-t-0 elevation-0
     blue-grey darken-4"
@@ -353,24 +353,26 @@ export default {
                 delimiter = index           
                 varName.push(splitedText[index])     
                 } else if (delimiter>=0 && (index == splitedText.length-1 || splitedText[index] == ' '|| splitedText[index] == '\n' || splitedText[index] == '"')){                    
-                  varName = varName.join("")
-                  let index = wanted_items.findIndex(wi => wi.var_name == varName.join(""))
                   
-                    if (this.updating && this.getUpdatingItem.wanted_items.findIndex(wi => wi.var_name == varName.join("")) != -1){
-                      continue
-                    } else {
-                      // this.wantedItems.push({
-                      //     var_name: varName.join(""),
-                      //     url:'',
-                      //     distinguer:{
-                      //         is_last:true
-                      //     },
-                      //     path:'',
-                      //     wanted_value:''
-                      // })
-                    }           
-                    varName = []
-                    delimiter = -1
+                  if(index == splitedText.length-1){
+                    varName.push(splitedText[index])  
+                  }
+
+                  varName = varName.join("")
+                  if (this.wantedItems.findIndex(wi => wi.var_name == varName) == -1){
+                    this.wantedItems.push({
+                        var_name: varName,
+                        url:'',
+                        distinguer:{
+                            is_last:true
+                        },
+                        path:'',
+                        wanted_value:''
+                    })
+                  } 
+
+                  varName = []
+                  delimiter = -1
                 } else if (delimiter>=0) {
                   varName.push(splitedText[index])
                 }
@@ -407,6 +409,17 @@ export default {
                 })
             }
         },
+
+        searchWastedVars(arrIndex, strIndex, response){
+          let varname = null;
+          if(arrIndex < this.wantedItems.length){
+            varname = this.searchWastedVars(arrIndex+1, 
+                  this.text.search(this.wantedItems[arrIndex],strIndex),
+                  response)
+            response.shift(varname)
+            return varname
+          }          
+        },
         
         changeText(){
           if(this.editingText){
@@ -420,9 +433,9 @@ export default {
       ...mapGetters([
         'getUpdatingItem'
       ]),
-      updating(){
-        return this.getUpdatingItem && this.getUpdatingItem.message
-      }
+      // updating(){
+      //   return this. && this.getUpdatingItem.message
+      // }
     },
 
     created(){
@@ -432,7 +445,7 @@ export default {
 
         if(this.getUpdatingItem){
           this.text = this.getUpdatingItem.message
-          this.wantedItems = this.getUpdatingItem.wanted_items 
+          Object.assign(this.wantedItems,this.getUpdatingItem.wanted_items)
         }
     }
 }

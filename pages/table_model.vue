@@ -20,8 +20,7 @@
             }"
             v-model="search"
             > 
-            </v-text-field>
-            <!-- trocar de to para @click, com funçao de limpar updating -->
+            </v-text-field>            
             <v-btn 
             :to="ViewCreate"
             icon>
