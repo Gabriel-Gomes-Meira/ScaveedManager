@@ -212,7 +212,10 @@
   -->
   <v-card v-else
   class="blue-grey darken-4 mt-2 col-10 elevation-0">
-
+    <v-alert :value="WastedVars.length>0?true:false"
+    type="warning">
+      ATENÇÃO!! Há items que não estão sendo usados em sua mensagem. Se envia-la dessa forma, o items serão apagados!
+    </v-alert>
     <v-row class="justify-space-between align-center" >
       <v-chip-group class="elevation-0 col-6"
         active-class="primary--text"
@@ -316,6 +319,14 @@
             </v-expansion-panel>
             </v-expansion-panels>
     </v-row>
+
+    <v-row justify="end"> 
+      <v-btn color="primary"
+      :disabled="!isvalids"
+      @click="validWantedItems">
+          UPDATE
+      </v-btn>
+    </v-row>
   </v-card>
 </template>
 
@@ -394,6 +405,7 @@ export default {
             }
 
             if(validated){
+              if(!this.getUpdatingItem){
                 this.$axios.post("/notification_model/", {
                   listen:{
                     id:this.selectedListen
@@ -407,18 +419,26 @@ export default {
                   // implementar mensagem de criado com sucesso
                   this.$router.back()
                 })
-            }
-        },
 
-        searchWastedVars(arrIndex, strIndex, response){
-          let varname = null;
-          if(arrIndex < this.wantedItems.length){
-            varname = this.searchWastedVars(arrIndex+1, 
-                  this.text.search(this.wantedItems[arrIndex],strIndex),
-                  response)
-            response.shift(varname)
-            return varname
-          }          
+              } else { 
+                //tava dando erro no server se enviasse com o _id
+                let wis_without_id = Object.create(this.wantedItems)
+                wis_without_id.forEach(ele => {
+                  delete ele._id
+                })               
+                this.$axios.put(`/notification_model/${this.getUpdatingItem._id.$oid}`, {
+                  model:{
+                    message:this.text,
+                    wanted_items: this.wantedItems,
+                    descarted_items: this.WastedVars
+                  },
+                }).then(response => {
+                  // TODO
+                  // implementar mensagem de criado com sucesso
+                  this.$router.back()
+                })
+              }
+            }
         },
         
         changeText(){
@@ -433,9 +453,28 @@ export default {
       ...mapGetters([
         'getUpdatingItem'
       ]),
-      // updating(){
-      //   return this. && this.getUpdatingItem.message
-      // }
+      isvalids(){
+        this.valids.forEach(ele =>{
+          if(!ele){
+            return ele
+          }
+        })
+
+        if(this.valids.length != this.wantedItems.length){
+          return false
+        }
+
+        return true
+      },
+      WastedVars(){
+        let response = []
+        for (let index = 0; index < this.wantedItems.length; index++) {
+          if(!this.text.includes(this.wantedItems[index].var_name)){
+            response.push(this.wantedItems[index]._id.$oid)
+          }
+        }
+        return response
+      },
     },
 
     created(){
@@ -445,7 +484,7 @@ export default {
 
         if(this.getUpdatingItem){
           this.text = this.getUpdatingItem.message
-          Object.assign(this.wantedItems,this.getUpdatingItem.wanted_items)
+          this.wantedItems = Object.create(this.getUpdatingItem.wanted_items)
         }
     }
 }
