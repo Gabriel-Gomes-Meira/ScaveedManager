@@ -150,8 +150,7 @@ export default {
 
     created(){
 
-        if(this.getUpdatingItem){
-            console.log(this.getUpdatingItem)
+        if(this.getUpdatingItem){            
             this.name = this.getUpdatingItem.name
             this.url = this.getUpdatingItem.url
             this.indentifier = this.getUpdatingItem.element_indentifier

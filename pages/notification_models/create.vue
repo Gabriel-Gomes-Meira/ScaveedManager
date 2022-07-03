@@ -114,13 +114,7 @@ export default {
 
     data() {
         return {
-            // items:[],
-            hasTitle:false,
-            title:"A Big Title",
-            hasImage:false,
-            refImage:"",
-            hasBlockText:false,
-            text:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa quisquam obcaecati commodi iste voluptatum amet. Obcaecati ab nesciunt tenetur adipisci, impedit culpa? Magni quibusdam doloribus officia suscipit amet iure culpa.",
+            // items:[],                                    
             selectedType:""
         }
     },

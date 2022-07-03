@@ -1,7 +1,8 @@
 <template>
   <v-app dark>
 
-    <v-navigation-drawer v-model="drawer" app absolute>
+    <v-navigation-drawer v-model="drawer" app absolute
+    height="100%">
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -24,10 +25,12 @@
     app style="position: inherit"
     max-height="60px">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      
-      <v-spacer></v-spacer>
       <v-toolbar-title v-text="title" class="text-h4" />
+      <v-spacer></v-spacer>
       
+      <v-btn to="/user/setting" icon >
+        <v-icon> mdi-cog-outline </v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main class="main-container">
       <v-container>
@@ -46,7 +49,7 @@
 
 <script>
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations} from "vuex";
 import loading from "./loading.vue"
 
 export default {
@@ -58,7 +61,16 @@ export default {
             drawer: false,
             fixed: false,
             title: "Scavued",
-            items: [{
+            
+        };
+    },
+
+    computed: {
+        ...mapGetters([
+            'loading', 'userSetted'
+        ]),
+        items(){
+          let list = [{
                 icon: "mdi-newspaper-variant-multiple-outline",
                 title: "News",
                 to: "/",
@@ -70,23 +82,40 @@ export default {
                 title: "Listens",
                 icon: "mdi-message-alert-outline",
                 to: "/listens/",
-            },{
+            }]
+          if(this.userSetted){
+            list.push({
               title: "Notification Models",
               icon: "mdi-email-newsletter",
               to: "/notification_models/"
-            }
-            ],
-        };
-    },
-
-    computed: {
-        ...mapGetters([
-            'loading'
-        ])
+            },{
+              title: "Model Tasks",
+              icon: "mdi-script-text-outline",
+              to: "/model_tasks/"
+            },{
+              title: "Queue Tasks",
+              icon: "mdi-human-queue",
+              to: "/queued_tasks/"
+            })
+          }
+          return list
+        }
     },
 
     components:{
         loading
+    },
+
+    methods:{
+      ...mapMutations({
+        setUserSetting:"setUserSetting"
+      })
+    },
+
+    created(){
+      this.$axios.get('/user/').then((resp) => {
+        this.setUserSetting(resp.data)
+      })
     },
 
     transition: "slide-y"

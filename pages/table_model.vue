@@ -34,6 +34,7 @@
         :items="Data"
         :search="search"
         :items-per-page="7"
+        :group-by="Agroupment"
         class="rounded-b-lg rounded-t-0"
         light
         id="Table"
@@ -103,7 +104,8 @@ export default {
         ViewCreate: String,
         ModelApi:String,
         LongItems: [],
-        MainAtt: ""
+        MainAtt: "",
+        Agroupment:null
     },
     
     data() {
