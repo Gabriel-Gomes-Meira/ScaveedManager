@@ -132,7 +132,7 @@ export default {
         if(this.getUpdatingItem){
             this.title = this.getUpdatingItem.file_name
             this.text = this.getUpdatingItem.content.join("\n")
-            this.selectedListen = this.getUpdatingItem.listen
+            this.selectedListen = this.getUpdatingItem.listen_id.$oid
         }
     },
 
@@ -157,7 +157,7 @@ export default {
 
                 } else {
                     this.$axios.put(`/task/${this.getUpdatingItem._id.$oid}`, {
-                        listen:{
+                        task:{
                             file_name: this.title,
                             content: this.text.split("\n")                            
                         },
