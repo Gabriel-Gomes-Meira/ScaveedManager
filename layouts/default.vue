@@ -34,16 +34,21 @@
     </v-app-bar>
     <v-main class="main-container">
       <v-container>
-            <transition name="slide-y">                
-                <Nuxt
-                v-show="!loading"/>                            
-            </transition>
-            
-            <loading 
-            :showing="loading"/>
-            
+        <transition name="slide-y">                
+            <Nuxt
+            v-show="!loading"/>                            
+        </transition>
+        
+        <loading 
+        :showing="loading"/>    
       </v-container>
-    </v-main>    
+    </v-main>
+
+    <v-snackbar 
+    v-model="getSnackBar.active"
+    v-text="getSnackBar.message"
+    :color="getSnackBar.color"
+    :timeout="getSnackBar.timeout"></v-snackbar>
   </v-app>
 </template>
 
@@ -67,7 +72,7 @@ export default {
 
     computed: {
         ...mapGetters([
-            'loading', 'userSetted'
+            'loading', 'userSetted', 'getSnackBar'
         ]),
         items(){
           let list = [{

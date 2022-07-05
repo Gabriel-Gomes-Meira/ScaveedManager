@@ -100,7 +100,8 @@ export default {
         return {
             title:"",
             titleRules:[v => !!v || "Titulo do arquivo é requido!",
-                        v => ! /^\W|(?:\/)+|(?:\s)+|\W$/gm.test(v) || "Titulo do arquivo deve ser válido!"],
+                        v => ! /^\W|(?:\/)+|(?:\s)+|\W$/gm.test(v) || "Titulo do arquivo deve ser válido!",
+                        v => v.slice(0,v.length-3)!=".rb" || "Nome do arquivo deve possuir uma valida extensao para script Ruby!"],
             text:"",
             textRules:[v => !!v || "Script em branco!"],
             listens:[],
