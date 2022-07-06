@@ -6,7 +6,8 @@
   :ViewCreate="'/listens/create'"
   :LongItems="['url']"
   :MainAtt="'name'"
-  :ModelApi="'/listens/'"></table-model>
+  :ModelApi="'/listens/'"
+  @remove="cutSource"></table-model>
 </template>
 
 <script>
@@ -42,7 +43,10 @@ export default {
         ...mapMutations({
             stopLoading: "stopLoading",
             startLoading: "startLoading"
-        })
+        }),
+        cutSource(index){
+            this.Data.splice(index,1);
+        }
     },
 
     created(){
@@ -52,7 +56,7 @@ export default {
             this.$axios.get('/sites/').then(resp => {
                 this.Data.forEach(ele => {
                     let match = resp.data.find(r => r._id.$oid == ele.site_id.$oid)
-                    ele["site"] = match.name                    
+                    ele["site"] = match?match.name:""
                 })
                 setTimeout(this.stopLoading, 750)            
             })  

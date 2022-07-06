@@ -52,16 +52,6 @@
             </template>
 
             <template v-slot:[`item._id`]="{ item }">
-                <v-btn 
-                text
-                @click="update(item)"                
-                class="mr-2 primary">                    
-                    <v-icon
-                        small                        
-                    >
-                        mdi-pencil
-                    </v-icon>
-                </v-btn>                
                 <v-btn
                 class="red"
                 text
@@ -72,9 +62,30 @@
                         mdi-delete
                     </v-icon>
                 </v-btn>
+                <v-btn 
+                text
+                @click="update(item)"                
+                class="mr-2 primary">                    
+                    <v-icon
+                        small                        
+                    >
+                        mdi-pencil
+                    </v-icon>
+                </v-btn>
+                <v-btn 
+                text
+                @click="clone(item)"                
+                class="mr-2 primary">                    
+                    <v-icon
+                        small                        
+                    >
+                        mdi-content-copy
+                    </v-icon>
+                </v-btn>                
+                
                 <!-- 
-                    TODO 
-                    turn this slot implementable by component father.
+                    // MAYBE TODO 
+                    // turn this slot implementable by component father.
                 -->
             </template>
         </v-data-table>
@@ -122,16 +133,25 @@ export default {
         }), 
 
         destroy(){
-            this.$axios.delete(`${this.ModelApi}${this.deletingItem._id.$oid}`)
+            // console.log(this.deletingItem, this.deletingItem._id.$oid)
+            let ide = this.deletingItem._id.$oid
+            this.$axios.delete(`${this.ModelApi}${ide}`)
                 .then(() =>{
+                    let index = this.Data.findIndex(ele => ele._id.$oid == ide)
+                    this.$emit('remove', index)
                     this.deletingItem = null
                 })
-            // TODO
-            // Refresh page or exclude from array
         },
 
         update(item) {
             this.setUpdatingItem(item)
+            this.$router.push(this.ViewCreate)
+        },
+
+        clone(item){
+            let cp_item = Object.create(item);            
+            cp_item._id = undefined            
+            this.setUpdatingItem(cp_item)
             this.$router.push(this.ViewCreate)
         }
     },

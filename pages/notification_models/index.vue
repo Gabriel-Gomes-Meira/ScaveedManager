@@ -6,7 +6,8 @@
   :ViewCreate="'/notification_models/create'"
   :LongItems="['message']"
   :MainAtt="'message'"
-  :ModelApi="'/notification_model/'"></table-model>
+  :ModelApi="'/notification_model/'"
+  @remove="cutSource"></table-model>
 </template>
 
 <script>
@@ -39,7 +40,10 @@ export default {
         ...mapMutations({
             stopLoading: "stopLoading",
             startLoading: "startLoading"
-        })
+        }),
+        cutSource(index){
+            this.Data.splice(index,1);
+        }
     },
 
     created(){
@@ -49,7 +53,7 @@ export default {
             this.$axios.get('/listens/').then(resp => {
                 this.Data.forEach(ele => {
                     let match = resp.data.find(r => r._id.$oid == ele.listen_id.$oid)
-                    ele["listen"] = match.name                    
+                    ele["listen"] = match?match.name:""                   
                 })
                 setTimeout(this.stopLoading, 750)            
             })  

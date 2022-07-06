@@ -6,7 +6,8 @@
   :ViewCreate="'/sites/create'"
   :LongItems="['url']"
   :MainAtt="'name'"
-  :ModelApi="'/sites/'"></table-model>
+  :ModelApi="'/sites/'"
+  @remove="cutSource"></table-model>
 </template>
 
 <script>
@@ -39,7 +40,10 @@ export default {
         ...mapMutations({
             stopLoading: "stopLoading",
             startLoading: "startLoading"
-        })
+        }),
+        cutSource(index){
+            this.Data.splice(index,1);
+        }
     },
 
     created(){

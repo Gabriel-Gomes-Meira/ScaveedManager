@@ -119,7 +119,7 @@ export default {
         }
     },
 
-    // TODO
+    
     // ON CREATE, IF UPDATE, USE THE ":TYPE" TO REDIRECT TO TELEGRAM OU VUE CARD MODEL ONCE TIME.
     
 

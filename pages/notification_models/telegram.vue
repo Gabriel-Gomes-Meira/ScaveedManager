@@ -332,7 +332,7 @@
 
 
 <script>
-import {mapGetters} from "vuex"
+import {mapGetters, mapMutations} from "vuex"
 export default {
     name:"MakerTelegramNotification",
 
@@ -405,7 +405,7 @@ export default {
             }
 
             if(validated){
-              if(!this.getUpdatingItem){
+              if(this.updating){
                 this.$axios.post("/notification_model/", {
                   listen:{
                     id:this.selectedListen
@@ -415,8 +415,13 @@ export default {
                     wanted_items: this.wantedItems
                   }
                 }).then(response => {
-                  // TODO
-                  // implementar mensagem de criado com sucesso
+                  
+                  this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento criado com sucesso!"
+  })
                   this.$router.back()
                 })
 
@@ -433,8 +438,13 @@ export default {
                     descarted_items: this.WastedVars
                   },
                 }).then(response => {
-                  // TODO
-                  // implementar mensagem de criado com sucesso
+                  
+                  this.setSnackBar({
+                    active:true,
+                    timeout:2000,
+                    color:"light-green darken-3",
+                    message:"Documento atualizado com sucesso!"
+                  })
                   this.$router.back()
                 })
               }
@@ -446,12 +456,16 @@ export default {
             this.searchVarNames();
           }         
           this.editingText = !this.editingText;
-        }
+        },
+
+        ...mapMutations({
+          setSnackBar: "setSnackBar"
+        })
     },
 
     computed:{
       ...mapGetters([
-        'getUpdatingItem'
+        'getUpdatingItem', 'updating'
       ]),
       isvalids(){
         this.valids.forEach(ele =>{

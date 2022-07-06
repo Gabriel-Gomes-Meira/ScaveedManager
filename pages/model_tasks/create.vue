@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex"
+import {mapGetters, mapMutations} from "vuex"
 
 export default {    
     name:"ModelTaskMaker",
@@ -112,7 +112,7 @@ export default {
 
     computed:{
         ...mapGetters([
-            'getUpdatingItem'
+            'getUpdatingItem', 'updating'
         ]),
 
         listenRules(){
@@ -141,7 +141,7 @@ export default {
         submit(){            
 
             if (this.$refs.form.validate()) {
-                if (!this.getUpdatingItem){
+                if (!this.updating){
                     this.$axios.post("/task/", {
                         task:{
                             file_name: this.title,
@@ -151,8 +151,13 @@ export default {
                             id: this.selectedListen
                         }
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de criado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento criado com sucesso!"
+  })
                         this.$router.back()
                     })
 
@@ -166,13 +171,22 @@ export default {
                             id: this.selectedListen
                         } 
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de atualizado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento atualizado com sucesso!"
+  })
                         this.$router.back()
                     })
                 }
             }
-        }
+        },
+
+        ...mapMutations({
+          setSnackBar: "setSnackBar"
+        })
     }
         
 }

@@ -45,10 +45,13 @@
     </v-main>
 
     <v-snackbar 
-    v-model="getSnackBar.active"
-    v-text="getSnackBar.message"
+    :value="getSnackBar.active"
     :color="getSnackBar.color"
-    :timeout="getSnackBar.timeout"></v-snackbar>
+    :timeout="getSnackBar.timeout"
+    >
+    <!-- @input="hiddenSnackBar" -->
+      {{getSnackBar.message}}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -113,7 +116,8 @@ export default {
 
     methods:{
       ...mapMutations({
-        setUserSetting:"setUserSetting"
+        setUserSetting:"setUserSetting",
+        hiddenSnackBar:"hiddenSnackBar"
       })
     },
 

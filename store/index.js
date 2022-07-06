@@ -19,6 +19,10 @@ export const getters = {
         return state.pageLoading
     },
 
+    updating(state){
+        return !!state.updatingItem && !!state.updatingItem._id 
+    },
+
     userSetted(state){
         return !!state.userSettings
     },
@@ -33,8 +37,7 @@ export const getters = {
 }
   
 export const mutations = {
-    setUpdatingItem(state, value) {                
-        // console.log(value)
+    setUpdatingItem(state, value) {                        
         state.updatingItem = value
     },
 
@@ -46,14 +49,16 @@ export const mutations = {
         state.pageLoading = false
     },
 
-    setUserSetting(state, value){
-        // console.log(value)
+    setUserSetting(state, value){        
         state.userSettings = value
     },
 
     setSnackBar(state, value){
-        console.log(value)
-        state.snackConfig(value)
+        state.snackConfig = value
+    },
+
+    hiddenSnackBar(state){
+        state.snackConfig.active = false;
     }
 }
 

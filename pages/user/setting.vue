@@ -84,8 +84,13 @@ export default {
                             telegram: this.telegram
                         }
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de criado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento criado com sucesso!"
+  })
                         this.$router.back()
                     })
 
@@ -95,8 +100,13 @@ export default {
                             telegram: this.telegram
                         }
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de atualizado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento atualizado com sucesso!"
+  })
                         this.$router.back()
                     })
                 }

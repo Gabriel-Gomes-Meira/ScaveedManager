@@ -82,7 +82,7 @@
         
 
 <script>
-import {mapGetters} from "vuex"
+import {mapGetters, mapMutations} from "vuex"
 
 export default {
     data: () => ({
@@ -101,7 +101,7 @@ export default {
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
-                if (!this.getUpdatingItem){
+                if (!this.updating){
                     this.$axios.post("/listens/", {
                         listen:{
                             name: this.name,
@@ -112,8 +112,13 @@ export default {
                             _id: this.selectedSite
                         }
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de criado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento criado com sucesso!"
+  })
                         this.$router.back()
                     })
 
@@ -130,21 +135,31 @@ export default {
                             indentifier: this.indentifier
                         } 
                     }).then(response => {
-                        // TODO
-                        // implementar mensagem de atualizado com sucesso
+                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Documento atualizado com sucesso!"
+  })
                         this.$router.back()
                     })
                 }
             }
         },
+
         clear() {
             this.$refs.form.reset();
-        }
+        },
+
+        ...mapMutations({
+          setSnackBar: "setSnackBar"
+        })
     },
 
     computed:{
         ...mapGetters([
-            'getUpdatingItem'
+            'getUpdatingItem', 'updating'
         ])
     },
 

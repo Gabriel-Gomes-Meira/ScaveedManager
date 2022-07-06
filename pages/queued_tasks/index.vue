@@ -1,11 +1,11 @@
 <template>
     <v-container>
-        <p class="text-subtitle">
-            Queue
-        </p>
-
+        
         <v-card v-if="tasks.length>0"
         color="">
+            <p class="text-subtitle">
+                Queue
+            </p>
             <v-row >
                 <v-list-item
                 v-for="task in tasks"
