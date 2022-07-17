@@ -48,9 +48,21 @@
                         <v-list-item-content>
                             <v-list-item-title v-text="task.file_name"></v-list-item-title>
 
+
                             <v-list-item-subtitle >
-                                Atualizado em {{task.updated_at | formatedDate()}}
+                                Atualizado em {{task.updated_at | formatedDate()}}                                
                             </v-list-item-subtitle>
+
+                            <v-list-item-subtitle v-if="task.count_erro">                                
+                                <v-card
+                                color="red lighten-1">
+                                Falhou {{task.count_erro}} veze(s) em executar!
+                                <br>
+                                Motivo do erro:
+                                    {{task.log}}
+                                </v-card>                                
+                            </v-list-item-subtitle>
+                            
                         </v-list-item-content>
 
                         <v-list-item-action>
@@ -179,7 +191,8 @@ export default {
         },
         feedData(){
             this.$axios.get('/queued_tasks/').then(response => {
-                this.tasks = response.data                
+                this.tasks = response.data       
+                console.log(response.data)         
             })
         }
     },
