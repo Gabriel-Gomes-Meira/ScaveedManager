@@ -62,7 +62,9 @@ const store = new Vuex.Store({
     
         setSnackBar(state, value){
             state.snackConfig.active = false;
-            state.snackConfig = value;
+            setTimeout(() => {
+                state.snackConfig = value;                    
+            }, 750)
         },
     
         hiddenSnackBar(state){

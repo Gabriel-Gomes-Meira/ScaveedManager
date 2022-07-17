@@ -28,6 +28,14 @@
                 <v-icon                
                 size="33">mdi-plus</v-icon>
             </v-btn>
+
+            <v-btn                   
+            @click="$emit('refresh')"              
+            icon
+            class="ml-2">
+                    <v-icon                
+                    size="25">mdi-restore</v-icon>
+                </v-btn>
         </v-toolbar>
 
         <v-data-table
@@ -53,36 +61,75 @@
             </template>
 
             <template v-slot:[`item._id`]="{ item }">
-                <v-btn
-                class="red"
-                text
-                dark
-                @click="deletingItem = item"
-                >
-                    <v-icon>
-                        mdi-delete
-                    </v-icon>
-                </v-btn>
-                <v-btn 
-                text
-                @click="update(item)"                
-                class="primary">                    
-                    <v-icon
-                        small                        
-                    >
-                        mdi-pencil
-                    </v-icon>
-                </v-btn>
-                <v-btn 
-                text
-                @click="clone(item)"                
-                class="mr-2 primary">                    
-                    <v-icon
-                        small                        
-                    >
-                        mdi-content-copy
-                    </v-icon>
-                </v-btn>                
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                        v-on="on"
+                        v-bind="attrs"
+                        small
+                        class="red darken-1"
+                        text
+                        dark
+                        @click="deletingItem = item"
+                        >
+                            <v-icon
+                            small>
+                                mdi-delete
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <span>
+                        Deletar
+                    </span>
+                </v-tooltip>
+
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                        v-on="on"
+                        v-bind="attrs"
+                        small 
+                        text
+                        dark
+                        @click="update(item)"                
+                        class="ml-1 indigo darken-1">                    
+                            <v-icon
+                                small                        
+                            >
+                                mdi-pencil
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <span>
+                        Editar
+                    </span>
+                </v-tooltip>
+
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                        v-on="on"
+                        v-bind="attrs"
+                        small 
+                        text
+                        dark
+                        @click="clone(item)"                
+                        class="ml-1 teal darken-3">                    
+                            <v-icon
+                                small                        
+                            >
+                                mdi-content-copy
+                            </v-icon>
+                        </v-btn>                
+                    </template>
+
+                        <span>
+                            Clonar
+                        </span>
+                </v-tooltip>
+                <slot name="extra-action" :item="item"></slot>
                 
                 <!-- 
                     // MAYBE TODO 
@@ -91,20 +138,22 @@
             </template>
         </v-data-table>
 
-        <Destroyer 
-        :active="!!deletingItem"
-        :Item="deletingItem"
-        :MainProp="MainAtt"
+        <confirmation-dialog 
+        :active="!!deletingItem"                
         @Closethis="deletingItem = null"
         @SendRequest="destroy()"
-        />
+        >
+            <template v-if="!!deletingItem">
+                Você tem certeza de que deseja deletar: "<b>{{deletingItem  [MainAtt]}}</b>" ?!                
+            </template>
+        </confirmation-dialog>
     </v-container>
 
 </template>
 
 <script>
 import {mapMutations} from "vuex"
-import Destroyer from "./destroyer.vue"
+import ConfirmationDialog from '@/components/confirmationDialog.vue';
 
 export default {
     name: "TableModel",
@@ -130,7 +179,8 @@ export default {
     
     methods: {
         ...mapMutations({
-            setUpdatingItem: "setUpdatingItem"
+            setUpdatingItem: "setUpdatingItem",
+            setSnackBar: "setSnackBar"
         }), 
 
         destroy(){
@@ -141,6 +191,13 @@ export default {
                     let index = this.Data.findIndex(ele => ele._id.$oid == ide)
                     this.$emit('remove', index)
                     this.deletingItem = null
+
+                    this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"amber darken-1",
+                                message:"Documento deletado com sucesso!"
+                    })
                 })
         },
 
@@ -161,6 +218,6 @@ export default {
         this.setUpdatingItem(null)
     },
     
-    components: { Destroyer }
+    components: { ConfirmationDialog }
 }
 </script>

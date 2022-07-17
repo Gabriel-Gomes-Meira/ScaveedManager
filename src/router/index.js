@@ -11,74 +11,52 @@ const routes = [
     component: HomeView
   },{
     path: '/user/setting',
-    name: 'user-setting',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/user/setting.vue')
+    name: 'user-setting',    
+    component: () => import( '../views/user/setting.vue')
+  },{
+    path: '/history/reports',
+    name: 'history-reports',    
+    component: () => import( '../views/history/reports.vue')
+  },{
+    path: '/history/tasks',
+    name: 'history-tasks',    
+    component: () => import( '../views/history/tasks.vue')
   },{
     path: '/sites',
-    name: 'sites',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/sites/')
+    name: 'sites',    
+    component: () => import( '../views/sites/')
   },{
     path: '/sites/create',
-    name: 'site-create',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/sites/create.vue')
+    name: 'site-create',    
+    component: () => import( '../views/sites/create.vue')
   },{
     path: '/listens',
-    name: 'listens',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/listens/')
+    name: 'listens',    
+    component: () => import( '../views/listens/')
   },{
     path: '/listens/create',
-    name: 'listen-create',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/listens/create')
+    name: 'listen-create',    
+    component: () => import( '../views/listens/create')
   },{
     path: '/notification_models/',
-    name: 'notification_model',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/notification_models/')
+    name: 'notification_model',    
+    component: () => import( '../views/notification_models/')
   },{
-    path: '/notification_models/',
-    name: 'notification_model-create',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/notification_models/create.vue')
+    path: '/notification_models/create',
+    name: 'notification_model-create',    
+    component: () => import( '../views/notification_models/create.vue')
   },{
     path: '/model_tasks/',
-    name: 'model-tasks',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/model_tasks/')
+    name: 'model-tasks',    
+    component: () => import( '../views/model_tasks/')
   },{
-    path: '/model_tasks/',
-    name: 'model-task-create',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/model_tasks/create.vue')
+    path: '/model_tasks/create',
+    name: 'model-task-create',    
+    component: () => import( '../views/model_tasks/create.vue')
   },{
     path: '/queued_tasks/',
-    name: 'queued_tasks',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/queued_tasks/')
+    name: 'queued_tasks',    
+    component: () => import( '../views/queued_tasks/')
   }
 ]
 

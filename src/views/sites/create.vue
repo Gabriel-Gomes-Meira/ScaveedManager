@@ -108,7 +108,7 @@ export default {
                                 timeout:2000,
                                 color:"light-green darken-3",
                                 message:"Documento atualizado com sucesso!"
-  })
+                        })
                         this.$router.back()
                     })
                 }

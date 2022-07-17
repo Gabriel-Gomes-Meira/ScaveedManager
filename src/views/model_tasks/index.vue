@@ -5,14 +5,52 @@
   :Model="'Model Tasks'"
   :ViewCreate="'/model_tasks/create'"  
   :MainAtt="'file_name'"
-  :ModelApi="'/task/'"
-  :Agroupment="'listend_id'"
-  @remove="cutSource"></table-model>
+  :ModelApi="'/task/'"  
+  @remove="cutSource"
+  @refresh="apiGet">
+    <template v-slot:extra-action="prop">
+        <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn 
+                small
+                v-on="on"
+                v-bind="attrs"
+                text
+                dark
+                @click="dialogid = prop.item._id.$oid" 
+                class="ml-1 blue-grey darken-3">                    
+                    <v-icon
+                        small                        
+                    >
+                        mdi-plus-box-multiple
+                    </v-icon>
+                </v-btn>   
+            </template>
+            
+            <span> 
+                Adicionar à fila
+            </span>
+        </v-tooltip>
+
+        <confirmation-dialog 
+        :active="dialogid == prop.item._id.$oid" 
+        @Closethis="dialogid = ''"
+        @SendRequest="pushQueue()"
+        >
+            <template>
+                Você tem certeza de que deseja adicionar "<b>{{prop.item.file_name}}</b>" à fila de tarefas?!
+                <br>
+                Saiba que tentar realizar essa ação poderá implicar em duplicação e/ou redundãncia nas suas operações.
+            </template>
+        </confirmation-dialog>
+    </template>
+  </table-model>
 </template>
 
 <script>
 import TableModel from '@/components/table_model.vue'
 import {mapMutations} from "vuex"
+import ConfirmationDialog from '@/components/confirmationDialog.vue'
 
 export default {
     
@@ -20,39 +58,59 @@ export default {
         return {
             Headers:[{
                 text: "Listen",
-                value: "listen_name"
+                value: "listen_name",
+                align: 'center'
             },{
                 text: "File Name",
-                value: "file_name"
+                value: "file_name",
+                align: 'center'
             },{
                 text: "Ações",
-                value: "_id"
+                value: "_id",
+                align: 'center'
             }],
-            Data:[]
+            Data:[],
+            dialogid:"",
         }
     },
 
     components:{
-        TableModel
+        TableModel,
+        ConfirmationDialog
     },
 
     methods:{
         ...mapMutations({
             stopLoading: "stopLoading",
-            startLoading: "startLoading"
+            startLoading: "startLoading",
+            setSnackBar: "setSnackBar"
         }),
         cutSource(index){
             console.log(index)
             this.Data.splice(index,1);
+        },
+        pushQueue(){
+            this.$axios.post(`/queued_tasks/${this.dialogid}`).then(() => {
+                this.setSnackBar({
+                        active:true,
+                        timeout:2000,
+                        color:"cyan darken-3",
+                        message:"Tarefa enfileirada com sucesso!"
+                })
+                this.dialogid = "";
+            })
+        },
+        apiGet(){
+            this.$axios.get('/task/').then(response => {
+                this.Data = response.data
+                setTimeout(this.stopLoading, 750)            
+            })    
         }
     },
 
     created(){
         this.startLoading()
-        this.$axios.get('/task/').then(response => {
-            this.Data = response.data
-            setTimeout(this.stopLoading, 750)            
-        })
+        this.apiGet()
     }
 
 }

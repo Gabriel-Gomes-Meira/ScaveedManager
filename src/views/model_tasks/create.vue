@@ -21,6 +21,7 @@
             ></v-text-field>
 
             <v-autocomplete 
+            v-show="!updatingOnQueue"
             item-text="name"
             item-value="_id.$oid"
             placeholder="Listen Associado"
@@ -115,14 +116,18 @@ export default {
             'getUpdatingItem', 'updating'
         ]),
 
+        updatingOnQueue(){
+            return this.updating && !!!this.getUpdatingItem.listen_id
+        },
+
         listenRules(){
-            if(this.getUpdatingItem){
+            if(this.updating && this.getUpdatingItem.listen_id){
                 return [
                     v => !!v || "Listen é requerido nessa atualização!"
                 ]
             }
             return []
-        }
+        },
     },
 
     created(){
@@ -133,7 +138,9 @@ export default {
         if(this.getUpdatingItem){
             this.title = this.getUpdatingItem.file_name
             this.text = this.getUpdatingItem.content.join("\n")
-            this.selectedListen = this.getUpdatingItem.listen_id.$oid
+            if(!this.updatingOnQueue){
+                this.selectedListen = this.getUpdatingItem.listen_id.$oid
+            }
         }
     },
 
@@ -141,7 +148,31 @@ export default {
         submit(){            
 
             if (this.$refs.form.validate()) {
-                if (!this.updating){
+                if (this.updatingOnQueue){
+                    this.$axios.put(`/queued_tasks/${this.getUpdatingItem._id.$oid}`, {
+                        task:{
+                            file_name: this.title,
+                            content: this.text.split("\n")                            
+                        }                        
+                    }).then(() => {                        
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"light-green darken-3",
+                                message:"Tarefa atualizada com sucesso!"
+                        })
+                        this.$router.back()
+                    }).catch(() => {
+                        // TODO
+                        // Melhorar esse tratamento em versões posteriores.
+                        this.setSnackBar({
+                                active:true,
+                                timeout:2000,
+                                color:"red darken-3",
+                                message:"Não foi possível realizar essa operação!"
+                        })
+                    })
+                } else if (!this.updating){
                     this.$axios.post("/task/", {
                         task:{
                             file_name: this.title,
@@ -150,14 +181,14 @@ export default {
                         listen: {
                             id: this.selectedListen
                         }
-                    }).then(response => {
+                    }).then(() => {
                         
                         this.setSnackBar({
                                 active:true,
                                 timeout:2000,
                                 color:"light-green darken-3",
                                 message:"Documento criado com sucesso!"
-  })
+                        })
                         this.$router.back()
                     })
 
@@ -170,14 +201,14 @@ export default {
                         listen: {
                             id: this.selectedListen
                         } 
-                    }).then(response => {
+                    }).then(() => {
                         
                         this.setSnackBar({
                                 active:true,
                                 timeout:2000,
                                 color:"light-green darken-3",
                                 message:"Documento atualizado com sucesso!"
-  })
+                        })
                         this.$router.back()
                     })
                 }

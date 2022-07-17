@@ -1,14 +1,15 @@
 <template>
 
-    <v-layout row justify-center>
+    <!-- <v-layout row justify-center> -->
         <v-dialog v-model="active" 
         persistent 
-        max-width="290" 
+        max-width="350" 
         >
             <v-card>
                 <v-card-title class="headline">Confirmação</v-card-title>
-                <v-card-text>Você tem certeza de que deseja deletar: "
-                    <b>{{human_indetification}}</b>" ?!</v-card-text>
+                <v-card-text>
+                    <slot />
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="info"  @click.native="Sumir" text>Recusar</v-btn>
@@ -16,26 +17,18 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-layout>
+    <!-- </v-layout> -->
 
 </template>
 
 <script>
 export default {
+    name:"confirmationDialog",
+    
     props:{
-        active:Boolean,
-        MainProp:String,
-        Item:null,
-    },
-
-    computed:{
-        human_indetification(){
-            if(this.Item && this.Item[this.MainProp]){
-                return this.Item[this.MainProp]
-            }
-            return "..."
-        }
-    },
+        active:Boolean,      
+        // Item:null,
+    },    
 
     methods:{
         Sumir () {

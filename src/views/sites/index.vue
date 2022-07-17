@@ -7,7 +7,8 @@
   :LongItems="['url']"
   :MainAtt="'name'"
   :ModelApi="'/sites/'"
-  @remove="cutSource"></table-model>
+  @remove="cutSource"
+  @refresh="apiGet"></table-model>
 </template>
 
 <script>
@@ -25,8 +26,9 @@ export default {
                 text: "URL",
                 value: "url"
             },{
-                text: "Açoes",
-                value: "_id"
+                text: "Ações",
+                value: "_id",
+                align: "end"
             }],
             Data:[]
         }
@@ -43,15 +45,18 @@ export default {
         }),
         cutSource(index){
             this.Data.splice(index,1);
+        },
+        apiGet(){
+            this.$axios.get('/sites/').then(response => {
+                this.Data = response.data
+                setTimeout(this.stopLoading, 750)            
+            })
         }
     },
 
     created(){
         this.startLoading()
-        this.$axios.get('/sites/').then(response => {
-            this.Data = response.data
-            setTimeout(this.stopLoading, 750)            
-        })
+        this.apiGet()
     }
 
 }

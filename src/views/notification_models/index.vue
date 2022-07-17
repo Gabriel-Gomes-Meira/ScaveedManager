@@ -7,7 +7,8 @@
   :LongItems="['message']"
   :MainAtt="'message'"
   :ModelApi="'/notification_model/'"
-  @remove="cutSource"></table-model>
+  @remove="cutSource"
+  @refresh="apiGet"></table-model>
 </template>
 
 <script>
@@ -25,8 +26,9 @@ export default {
                 text: "Mensagem",
                 value: "message"
             },{
-                text: "Açoes",
-                value: "_id"
+                text: "Ações",
+                value: "_id",
+                align: "end"
             }],
             Data:[]
         }
@@ -43,15 +45,18 @@ export default {
         }),
         cutSource(index){
             this.Data.splice(index,1);
+        },
+        apiGet(){
+            this.$axios.get('/notification_model/').then(response => {
+                this.Data = response.data
+                setTimeout(this.stopLoading, 750)                        
+            })
         }
     },
 
     created(){
         this.startLoading()
-        this.$axios.get('/notification_model/').then(response => {
-            this.Data = response.data
-            setTimeout(this.stopLoading, 750)                        
-        })
+        this.apiGet()
     }
 
 }

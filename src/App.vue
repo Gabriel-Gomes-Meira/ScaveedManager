@@ -18,7 +18,35 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-      </v-list>
+
+        <v-list-group
+        active-class="accent--white white--text">
+          <template v-slot:activator>
+            <v-list-item-icon>
+              <v-icon>
+                mdi-history
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>History</v-list-item-title>
+          </template>
+          
+          <v-list-item
+            v-for="(item, index) in historyList"
+            :key="'historyList' + index"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+          
+        </v-list-group>
+      </v-list>            
     </v-navigation-drawer>
 
     <v-app-bar :clipped-left="clipped" 
@@ -32,7 +60,7 @@
         <v-icon> mdi-cog-outline </v-icon>
       </v-btn>
     </v-app-bar>
-    <v-main class="main-container">
+    <v-main class="main-container pt-4">
       <v-container>
         <transition name="slide-y">                
             <router-view
@@ -65,11 +93,19 @@ export default {
 
     data() {
         return {
-            clipped: false,
-            drawer: false,
-            fixed: false,
-            title: "Scavued",
-            
+          clipped: false,
+          drawer: false,
+          fixed: false,
+          title: "Scavued",
+          historyList:[{
+            icon: "mdi-timeline-alert-outline",
+            title: "Reports",
+            to:"/history/reports"
+          },{
+            icon: "mdi-calendar-check-outline",
+            title: "Tasks",
+            to:"/history/tasks"
+          }]
         };
     },
 
@@ -132,6 +168,10 @@ export default {
 </script>
 
 <style>
+  html{
+    overflow: hidden!important;
+  }
+
     .slide-y-enter-active, .slide-y-leave-active { 
         transition: 0.8s;         
         position: relative;
