@@ -64,7 +64,7 @@
                             <v-spacer></v-spacer>
                             
                             <v-btn
-                            v-show="isExpanded(item) ? true : false"                                            
+                            v-show="isExpanded(item)"                                            
                             @click="dialogid = item._id.$oid"              
                             icon
                             small
@@ -103,7 +103,7 @@
                         </confirmation-dialog>
                         
                         <v-card 
-                        v-show="isExpanded(item) ? true : false">                
+                        v-show="isExpanded(item)">                
                             <template                 
                             class="mt-1">
                             <v-expansion-panels>

@@ -395,7 +395,7 @@ export default {
             }
 
             if(validated){
-              if(!this.updating){
+              if(!this.updating){                
                 this.$axios.post("/notification_model/", {                  
                   model:{
                     message:this.text,
@@ -486,12 +486,11 @@ export default {
     },
 
     created(){
-
-
-        if(this.getUpdatingItem){
-          this.text = this.getUpdatingItem.message
-          this.wantedItems = Object.create(this.getUpdatingItem.wanted_items)
-        }
+      if(this.getUpdatingItem){
+        this.text = this.getUpdatingItem.message
+        
+        this.wantedItems = JSON.parse(JSON.stringify(this.getUpdatingItem.wanted_items))
+      }
     }
 }
 </script>
