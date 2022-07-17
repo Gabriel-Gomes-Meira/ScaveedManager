@@ -55,12 +55,10 @@
                         <v-expansion-panel-header>
                             {{ item.file_name}}
                             <br>
-                            Concluído em 
-                            <!-- {{ item.terminated_at | formatedDate}} -->
+                            Concluído em {{ item.terminated_at | formatedDate}}
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            Inicio da Execução em
-                            <!-- {{ item.initiated_at | formatedDate}} -->                            
+                            Inicio da Execução em {{ item.initialized_at | formatedDate}}  
                             <v-divider />
                             <br>
                             {{item.count_erro?`Quantidade de falhas: ${item.count_erro}`:""}}
@@ -78,10 +76,7 @@
                             readonly
                             auto-grow
                             no-resize
-                            solo>
-                                <!-- <template>
-                                    {{}}
-                                </template> -->
+                            solo>                                
                             </v-textarea>
                         </v-expansion-panel-content>
                         </v-expansion-panel>
