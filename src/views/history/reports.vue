@@ -103,10 +103,11 @@
                         </confirmation-dialog>
                         
                         <v-card 
-                        v-show="isExpanded(item)">                
-                            <template                 
-                            class="mt-1">
-                            <v-expansion-panels>
+                        v-show="isExpanded(item)"
+                        >                
+                            
+                            <v-expansion-panels
+                            style="overflow-x:auto">
                                 <v-expansion-panel
                                 v-for="(register,index) in item.registers"
                                 :key="`${index}_expansion_${item._id.$oid}`"
@@ -114,13 +115,12 @@
                                 <v-expansion-panel-header>
                                     Registrado em {{ register.created_at | formatedDate}}
                                 </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    {{register.content}}
+                                <v-expansion-panel-content
+                                >
+                                    <pre>{{register.content}}</pre>
                                 </v-expansion-panel-content>
                                 </v-expansion-panel>
-                            </v-expansion-panels>                               
-                            </template>
-
+                            </v-expansion-panels>                                                           
                         </v-card>
                     </v-col>
                 </v-row>

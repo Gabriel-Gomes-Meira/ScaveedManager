@@ -1,94 +1,70 @@
 <template>
-    <v-container    
-    >
-        <v-form v-model="valid" ref="form" lazy-validation>
-        <v-toolbar
-        color="blue-grey darken-3"
-        class="pr-1 rounded-t-lg elevation-1"        
-        >    
+    <v-form v-model="valid" ref="form" lazy-validation>
+    <v-container     
+    style="height: 80vh;"
+    class="d-flex align-center align-content-center">
+        <v-row justify="center">
+            <v-card class="col-8 align-center">
+                <v-card-text class="pt-0">
+                        <!-- <v-text-field
+                        label="Title"
+                        v-model="title"
+                        :rules="titleRules"
+                        :counter="150"
+                        required
+                        color="white"
+                        ></v-text-field> -->
                         
-            <v-text-field
-            class="mt-8 col-3 solo elevation-0"
-            v-model="title"
-            :rules="titleRules"
-            solo
-            background-color="blue-grey ligthen-4"
-            dense
-            color=""
-            label="Nome do Arquivo"
-            placeholder="anyonefile.rb"
+                        <v-file-input
+                        :rules="fileRules"
+                        accept=".rb"
+                        placeholder="Up your File"
+                        prepend-icon="mdi-text"
+                        label="Script"
+                        v-model="file"
+                        @change="readContent"
+                        ></v-file-input>
 
-            ></v-text-field>
-
-            <v-autocomplete 
-            v-show="!updatingOnQueue"
-            item-text="name"
-            item-value="_id.$oid"
-            placeholder="Listen Associado"
-            label="Listen"       
-            class="col-3 mt-8 ml-2"             
-            solo
-            dense      
-            :rules="listenRules"      
-            background-color="blue-grey ligthen-4"
-            :items="listens"
-            v-model="selectedListen"            
-            />
-
-
-            <v-spacer></v-spacer>
-            <v-toolbar-title>
-                Tasker Maker
-            </v-toolbar-title>                        
-            
-        </v-toolbar>        
-
-        
-        
-        <v-sheet color="blue-grey darken-4
-        d-flex px-2 py-1"
-        min-height="100"
-        max-height="100%">
-            
-            <v-textarea 
-            light
-            background-color="white "
-            class="text--black ma-0 px-2 custom_area_text
-            elevation-0"
-            color="black"
-            auto-grow
-            no-resize
-            :rules="textRules"
-            v-model="text"
-            />            
-            
-        </v-sheet>       
-        </v-form>
-
-        <v-toolbar
-        color="blue-grey darken-3"
-        class="pr-1 rounded-b-lg elevation-1"       
-        dense 
-        >
-            <v-btn text             
-            color="blue-grey lighten-4"
-            @click="$router.back()">
-                <v-icon
-                size="30">mdi-arrow-left</v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-
-            <v-btn outlined            
-            color="light-blue"
-            @click="submit"
-            >
-                <v-icon
-                color="light-blue accent-3"
-                size="30">mdi-send-outline</v-icon>
-            </v-btn>
-        </v-toolbar>
+                        <v-autocomplete 
+                        v-show="!updatingOnQueue"
+                        item-text="name"
+                        item-value="_id.$oid"
+                        placeholder="Listen Associado"
+                        label="Listen"                                                       
+                        dense      
+                        :rules="listenRules"                              
+                        :items="listens"
+                        v-model="selectedListen"            
+                        />
+                
+                        <v-row 
+                        class="mt-2 px-4">
+                            <v-btn
+                                large
+                                text
+                                @click="submit"
+                                :disabled="!valid || processingFile"
+                                class="light-green"
+                            >
+                                <v-icon
+                                size="36">
+                                    mdi-content-save-outline
+                                </v-icon>
+                            </v-btn>
+                            <v-spacer></v-spacer>                            
+                            <v-btn
+                            class="red darken-4 ml-4" 
+                            large
+                            @click="$router.back()">
+                                <v-icon
+                                size="38">mdi-arrow-left</v-icon>
+                            </v-btn>                 
+                        </v-row>
+                </v-card-text>        
+            </v-card>
+        </v-row>        
     </v-container>
-
+    </v-form>
 </template>
 
 <script>
@@ -99,15 +75,16 @@ export default {
 
     data() {
         return {
+            fileRules:[v => !!v || "Arquivo do script é obrigatório.",
+                            v => v == null || v.type == "application/x-ruby" || "Tipo não adequado!!"],
+            file:null,
+            content:[],
             title:"",
-            titleRules:[v => !!v || "Titulo do arquivo é requido!",
-                        v => ! /^\W|(?:\/)+|(?:\s)+|\W$/gm.test(v) || "Titulo do arquivo deve ser válido!",
-                        v => v.slice(0,v.length-3)!=".rb" || "Nome do arquivo deve possuir uma valida extensao para script Ruby!"],
-            text:"",
             textRules:[v => !!v || "Script em branco!"],
             listens:[],
             selectedListen:null,
             valid:false,
+            processingFile:false
         }
     },
 
@@ -137,7 +114,7 @@ export default {
 
         if(this.getUpdatingItem){
             this.title = this.getUpdatingItem.file_name
-            this.text = this.getUpdatingItem.content.join("\n")
+            this.content = this.getUpdatingItem.content
             if(!this.updatingOnQueue){
                 this.selectedListen = this.getUpdatingItem.listen_id.$oid
             }
@@ -148,11 +125,12 @@ export default {
         submit(){            
 
             if (this.$refs.form.validate()) {
+                
                 if (this.updatingOnQueue){
                     this.$axios.put(`/queued_tasks/${this.getUpdatingItem._id.$oid}`, {
                         task:{
                             file_name: this.title,
-                            content: this.text.split("\n")                            
+                            content: this.content
                         }                        
                     }).then(() => {                        
                         this.setSnackBar({
@@ -176,7 +154,7 @@ export default {
                     this.$axios.post("/task/", {
                         task:{
                             file_name: this.title,
-                            content: this.text.split("\n")                            
+                            content: this.content
                         },
                         listen: {
                             id: this.selectedListen
@@ -196,7 +174,7 @@ export default {
                     this.$axios.put(`/task/${this.getUpdatingItem._id.$oid}`, {
                         task:{
                             file_name: this.title,
-                            content: this.text.split("\n")                            
+                            content: this.content                         
                         },
                         listen: {
                             id: this.selectedListen
@@ -217,7 +195,18 @@ export default {
 
         ...mapMutations({
           setSnackBar: "setSnackBar"
-        })
+        }),
+
+        readContent(e){          
+            this.title = e.name            
+            this.processingFile = true;
+
+            e.text().then(content => {
+                this.content = content.split("\n")
+                this.processingFile = false
+            })
+        },
+        
     }
         
 }
