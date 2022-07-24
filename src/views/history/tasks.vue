@@ -1,7 +1,6 @@
 <template>
   <v-data-iterator
       :items="Data"      
-      :items-per-page="4"
       :single-expand="true"
       hide-default-footer
     >
@@ -66,7 +65,7 @@
                             <br v-if="item.count_erro">
                             Logs:
                             <br>
-                            {{item.log}}
+                            <pre>{{item.log}}</pre>
                             <v-divider />
                             <br>
                             Conteúdo do arquivo:

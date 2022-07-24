@@ -1,7 +1,6 @@
 <template>
   <v-data-iterator
       :items="Data"      
-      :items-per-page="4"
       :single-expand="true"
       hide-default-footer
     >

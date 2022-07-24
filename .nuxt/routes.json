@@ -1,0 +1,92 @@
+[
+  {
+    "name": "destroyer",
+    "path": "/destroyer",
+    "component": "/home/orangepi/MiningManager/pages/destroyer.vue",
+    "chunkName": "pages/destroyer"
+  },
+  {
+    "name": "listens",
+    "path": "/listens",
+    "component": "/home/orangepi/MiningManager/pages/listens/index.vue",
+    "chunkName": "pages/listens/index"
+  },
+  {
+    "name": "model_tasks",
+    "path": "/model_tasks",
+    "component": "/home/orangepi/MiningManager/pages/model_tasks/index.vue",
+    "chunkName": "pages/model_tasks/index"
+  },
+  {
+    "name": "notification_models",
+    "path": "/notification_models",
+    "component": "/home/orangepi/MiningManager/pages/notification_models/index.vue",
+    "chunkName": "pages/notification_models/index"
+  },
+  {
+    "name": "queued_tasks",
+    "path": "/queued_tasks",
+    "component": "/home/orangepi/MiningManager/pages/queued_tasks/index.vue",
+    "chunkName": "pages/queued_tasks/index"
+  },
+  {
+    "name": "sites",
+    "path": "/sites",
+    "component": "/home/orangepi/MiningManager/pages/sites/index.vue",
+    "chunkName": "pages/sites/index"
+  },
+  {
+    "name": "table_model",
+    "path": "/table_model",
+    "component": "/home/orangepi/MiningManager/pages/table_model.vue",
+    "chunkName": "pages/table_model"
+  },
+  {
+    "name": "listens-create",
+    "path": "/listens/create",
+    "component": "/home/orangepi/MiningManager/pages/listens/create.vue",
+    "chunkName": "pages/listens/create"
+  },
+  {
+    "name": "model_tasks-create",
+    "path": "/model_tasks/create",
+    "component": "/home/orangepi/MiningManager/pages/model_tasks/create.vue",
+    "chunkName": "pages/model_tasks/create"
+  },
+  {
+    "name": "notification_models-create",
+    "path": "/notification_models/create",
+    "component": "/home/orangepi/MiningManager/pages/notification_models/create.vue",
+    "chunkName": "pages/notification_models/create"
+  },
+  {
+    "name": "notification_models-telegram",
+    "path": "/notification_models/telegram",
+    "component": "/home/orangepi/MiningManager/pages/notification_models/telegram.vue",
+    "chunkName": "pages/notification_models/telegram"
+  },
+  {
+    "name": "notification_models-vuecardmodel",
+    "path": "/notification_models/vuecardmodel",
+    "component": "/home/orangepi/MiningManager/pages/notification_models/vuecardmodel.vue",
+    "chunkName": "pages/notification_models/vuecardmodel"
+  },
+  {
+    "name": "sites-create",
+    "path": "/sites/create",
+    "component": "/home/orangepi/MiningManager/pages/sites/create.vue",
+    "chunkName": "pages/sites/create"
+  },
+  {
+    "name": "user-setting",
+    "path": "/user/setting",
+    "component": "/home/orangepi/MiningManager/pages/user/setting.vue",
+    "chunkName": "pages/user/setting"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/home/orangepi/MiningManager/pages/index.vue",
+    "chunkName": "pages/index"
+  }
+]
