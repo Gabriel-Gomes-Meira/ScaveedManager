@@ -47,7 +47,7 @@
                 <v-row>
                     <v-col
                         v-for="item in items"
-                        :key="item.fromId.$oid"
+                        :key="item.id"
                         cols="12"     
                         class="mb-2"       
                     >
@@ -59,7 +59,7 @@
                         dense
                         >
                         <!-- :class="isExpanded(item) ? '' : 'rounded-b'" -->
-                            <v-toolbar-title>{{item.fromName}}</v-toolbar-title>
+                            <v-toolbar-title>{{item.listen_name}}</v-toolbar-title>
                             <v-spacer></v-spacer>
                             
                             <v-btn
@@ -97,7 +97,7 @@
                         @SendRequest="flushSet(item)"
                         >
                             <template>
-                                Você tem certeza de que deseja limpar os relatórios do listen "<b>{{item.fromName}}</b>" ?!                
+                                Você tem certeza de que deseja limpar os relatórios do listen "<b>{{item.listen_name}}</b>" ?!                
                             </template>
                         </confirmation-dialog>
                         
@@ -109,14 +109,15 @@
                             style="overflow-x:auto">
                                 <v-expansion-panel
                                 v-for="(register,index) in item.registers"
-                                :key="`${index}_expansion_${item.id}`"
+                                :key="register.id"
                                 >
+                                <!-- :key="`${index}_expansion_${item.id}`" -->
                                 <v-expansion-panel-header>
-                                    Registrado em {{ register.created_at | formatedDate}}
+                                    Registrado em {{ register.at | formatedDate}}
                                 </v-expansion-panel-header>
                                 <v-expansion-panel-content
                                 >
-                                    <pre>{{register.content}}</pre>
+                                    <pre>{{register.current_state}}</pre>
                                 </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>                                                           

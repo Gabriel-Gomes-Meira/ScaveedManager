@@ -5,7 +5,7 @@
   :Model="'Model Tasks'"
   :ViewCreate="'/model_tasks/create'"  
   :MainAtt="'file_name'"
-  :ModelApi="'/task/'"  
+  :ModelApi="'/tasks/'"  
   @remove="cutSource"
   @refresh="apiGet">
     <template v-slot:extra-action="prop">
@@ -101,7 +101,7 @@ export default {
             })
         },
         apiGet(){
-            this.$axios.get('/task/').then(response => {
+            this.$axios.get('/tasks/').then(response => {
                 this.Data = response.data
                 setTimeout(this.stopLoading, 750)            
             })    

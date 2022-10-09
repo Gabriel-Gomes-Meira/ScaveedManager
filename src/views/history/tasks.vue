@@ -10,7 +10,7 @@
                 class="pl-2 pr-4 rounded-t-lg"
                 elevation="0"
                 >
-                    <v-toolbar-title>Relatórios dos Listens</v-toolbar-title>
+                    <v-toolbar-title>Relatórios das Tasks</v-toolbar-title>
                     <v-spacer></v-spacer>
                     
                     <v-btn                   
@@ -71,7 +71,7 @@
                             Conteúdo do arquivo:
                             <br>
                             <v-textarea
-                            :value="item.content | scriptedFormat()"
+                            :value="item.content"
                             readonly
                             auto-grow
                             no-resize

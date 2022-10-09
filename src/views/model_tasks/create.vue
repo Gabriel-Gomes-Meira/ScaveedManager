@@ -78,7 +78,7 @@ export default {
             fileRules:[v => !!v || "Arquivo do script é obrigatório.",
                             v => v == null || v.type == "application/x-ruby" || "Tipo não adequado!!"],
             file:null,
-            content:[],
+            content:"",
             title:"",
             textRules:[v => !!v || "Script em branco!"],
             listens:[],
@@ -151,7 +151,7 @@ export default {
                         })
                     })
                 } else if (!this.updating){
-                    this.$axios.post("/task/", {
+                    this.$axios.post("/tasks/", {
                         task:{
                             file_name: this.title,
                             content: this.content
@@ -171,7 +171,7 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/task/${this.getUpdatingItem.id}`, {
+                    this.$axios.put(`/tasks/${this.getUpdatingItem.id}`, {
                         task:{
                             file_name: this.title,
                             content: this.content                         
@@ -202,7 +202,7 @@ export default {
             this.processingFile = true;
 
             e.text().then(content => {
-                this.content = content.split("\n")
+                this.content = content
                 this.processingFile = false
             })
         },

@@ -314,7 +314,7 @@
       <v-btn color="primary"
       :disabled="!isvalids"
       @click="validWantedItems">
-          UPDATE
+          {{updating?'UPDATE':'CREATE'}}
       </v-btn>
     </v-row>
   </v-card>
