@@ -8,7 +8,7 @@
                 <v-card-text class="pt-0">
                     <v-autocomplete 
                     item-text="name"
-                    item-value="_id.$oid"
+                    item-value="id"
                     placeholder="Site to Listen"
                     label="Site"                    
                     :items="sites"
@@ -106,11 +106,9 @@ export default {
                         listen:{
                             name: this.name,
                             url: this.url,                    
-                            element_indentifier: this.indentifier
-                        },
-                        site: {
-                            id: this.selectedSite
-                        }
+                            element_indentifier: this.indentifier,
+                            site_id: this.selectedSite
+                        },                        
                     }).then(response => {
                         
                         this.setSnackBar({
@@ -123,7 +121,7 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/listens/${this.getUpdatingItem._id.$oid}`, {
+                    this.$axios.put(`/listens/${this.getUpdatingItem.id}`, {
                         listen:{
                             name: this.name,
                             url: this.url,                    
@@ -165,7 +163,7 @@ export default {
             this.name = this.getUpdatingItem.name
             this.url = this.getUpdatingItem.url
             this.indentifier = this.getUpdatingItem.element_indentifier
-            this.selectedSite = this.getUpdatingItem.site_id.$oid
+            this.selectedSite = this.getUpdatingItem.siteid
         }
 
         this.$axios.get('/sites/').then(response => {

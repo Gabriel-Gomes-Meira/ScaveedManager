@@ -13,7 +13,7 @@
             <v-autocomplete 
             class="col-3 mt-8"
             item-text="name"
-            item-value="_id.$oid"
+            item-value="id"
             placeholder="Listen"
             label="Listen"                    
             :items="Listens"
@@ -150,7 +150,7 @@ export default {
         //provisiouly
         if(this.getUpdatingItem) {
             this.selectedType = 'telegram'
-            this.selectedListen = this.getUpdatingItem.listen_id.$oid
+            this.selectedListen = this.getUpdatingItem.listen_id
         }
     },
 

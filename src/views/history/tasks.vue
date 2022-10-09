@@ -49,7 +49,7 @@
                     <v-expansion-panels>
                         <v-expansion-panel
                         v-for="(item,index) in items"
-                        :key="`${index}_expansion_${item._id.$oid}`"
+                        :key="`${index}_expansion_${item.id}`"
                         >
                         <v-expansion-panel-header>
                             {{ item.file_name}}

@@ -27,7 +27,7 @@ const store = new Vuex.Store({
         },
     
         updating(state){
-            return !!state.updatingItem && !!state.updatingItem._id 
+            return !!state.updatingItem && !!state.updatingItem.id 
         },
     
         userSetted(state){

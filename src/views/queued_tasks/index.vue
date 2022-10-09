@@ -26,7 +26,7 @@
                 <v-row >
                     <v-list-item
                     v-for="task in tasks"
-                    :key="task._id.$oid"
+                    :key="task.id"
                     >
                         <v-list-item-avatar>
                             <v-tooltip top>
@@ -71,7 +71,7 @@
                                     <v-btn icon
                                     v-bind="attrs"
                                     v-on="on"
-                                    @click="dialogid = task._id.$oid">
+                                    @click="dialogid = task.id">
                                         <v-icon color="orange lighten-1">mdi-close-octagon-outline</v-icon>
                                     </v-btn>
                                 </template>
@@ -100,7 +100,7 @@
                         </v-list-item-action>
 
                         <confirmation-dialog
-                        :active="dialogid == task._id.$oid"                
+                        :active="dialogid == task.id"                
                         @Closethis="dialogid = ''"
                         @SendRequest="dequeue(task)">
                             <template>

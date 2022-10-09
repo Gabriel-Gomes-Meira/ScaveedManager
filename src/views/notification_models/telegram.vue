@@ -131,7 +131,7 @@
                     
                     <v-checkbox
                     class="col-12"
-                    v-model="item['distinguer']['is_last']"
+                    v-model="item['islast']"
                     label="isLast"></v-checkbox>
 
                     <v-btn class="rounded-lg col-1"
@@ -295,7 +295,7 @@
                     
                     <v-checkbox
                     class="col-12"
-                    v-model="item['distinguer']['is_last']"
+                    v-model="item['islast']"
                     label="isLast"></v-checkbox>
 
                     <v-btn class="rounded-lg col-1"
@@ -364,9 +364,7 @@ export default {
                     this.wantedItems.push({
                         var_name: varName,
                         url:'',
-                        distinguer:{
-                            is_last:true
-                        },
+                        islast:false,
                         path:'',
                         wanted_value:''
                     })
@@ -396,12 +394,14 @@ export default {
 
             if(validated){
               if(!this.updating){                
-                this.$axios.post("/notification_model/", {                  
-                  model:{
-                    message:this.text,
-                    wanted_items: this.wantedItems,
-                    listen_id: this.selectedListen
-                  }
+                this.$axios.post("/notification_models/", {                  
+                  //model:{                                        
+                  //},
+                  message:this.text,
+                  wanted_items: {
+                    items: this.wantedItems
+                  },                  
+                  listen_id: this.selectedListen
                 }).then(response => {
                   
                   this.setSnackBar({
@@ -415,17 +415,22 @@ export default {
 
               } else { 
                 //tava dando erro no server se enviasse com o _id
-                let wis_without_id = Object.create(this.wantedItems)
-                wis_without_id.forEach(ele => {
-                  delete ele._id
-                })               
-                this.$axios.put(`/notification_model/${this.getUpdatingItem._id.$oid}`, {
-                  model:{
-                    message:this.text,
-                    wanted_items: this.wantedItems,
-                    descarted_items: this.WastedVars,
-                    listen_id: this.selectedListen
+                // let wis_without_id = Object.create(this.wantedItems)
+                // wis_without_id.forEach(ele => {
+                //   delete ele.id
+                // })               
+                this.$axios.put(`/notification_models/${this.getUpdatingItem.id}`, {
+                  // model:{
+                    
+                  // },
+                  message:this.text,
+                  wanted_items: {
+                    items: this.wantedItems
                   },
+                  descarted_items:{
+                    deleted: this.WastedVars,                    
+                  }, 
+                  listen_id: this.selectedListen
                 }).then(response => {
                   
                   this.setSnackBar({
@@ -478,7 +483,7 @@ export default {
         let response = []
         for (let index = 0; index < this.wantedItems.length; index++) {
           if(!this.text.includes(this.wantedItems[index].var_name)){
-            response.push(this.wantedItems[index]._id.$oid)
+            response.push(this.wantedItems[index].id)
           }
         }
         return response
@@ -488,6 +493,7 @@ export default {
     created(){
       if(this.getUpdatingItem){
         this.text = this.getUpdatingItem.message
+        this.selectedListen
         
         this.wantedItems = JSON.parse(JSON.stringify(this.getUpdatingItem.wanted_items))
       }

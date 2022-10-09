@@ -17,7 +17,7 @@
                 v-bind="attrs"
                 text
                 dark
-                @click="dialogid = prop.item._id.$oid" 
+                @click="dialogid = prop.item.id" 
                 class="ml-1 blue-grey darken-3">                    
                     <v-icon
                         small                        
@@ -33,7 +33,7 @@
         </v-tooltip>
 
         <confirmation-dialog 
-        :active="dialogid == prop.item._id.$oid" 
+        :active="dialogid == prop.item.id" 
         @Closethis="dialogid = ''"
         @SendRequest="pushQueue()"
         >

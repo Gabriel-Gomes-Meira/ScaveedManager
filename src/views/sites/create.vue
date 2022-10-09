@@ -96,7 +96,7 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/sites/${this.getUpdatingItem._id.$oid}`, {
+                    this.$axios.put(`/sites/${this.getUpdatingItem.id}`, {
                         site:{
                             name: this.name,
                             url: this.url,                    
@@ -135,6 +135,7 @@ export default {
         if(this.getUpdatingItem){
             this.name = this.getUpdatingItem.name
             this.url = this.getUpdatingItem.url
+            console.log(`Atualizando, e como prova, veja meu id: ${this.getUpdatingItem.id}`);
         }
     },
 

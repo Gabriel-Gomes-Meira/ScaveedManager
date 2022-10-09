@@ -6,7 +6,7 @@
   :ViewCreate="'/notification_models/create'"
   :LongItems="['message']"
   :MainAtt="'message'"
-  :ModelApi="'/notification_model/'"
+  :ModelApi="'/notification_models/'"
   @remove="cutSource"
   @refresh="apiGet"></table-model>
 </template>
@@ -47,7 +47,7 @@ export default {
             this.Data.splice(index,1);
         },
         apiGet(){
-            this.$axios.get('/notification_model/').then(response => {
+            this.$axios.get('/notification_models/').then(response => {
                 this.Data = response.data
                 setTimeout(this.stopLoading, 750)                        
             })

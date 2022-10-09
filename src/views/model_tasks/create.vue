@@ -28,7 +28,7 @@
                         <v-autocomplete 
                         v-show="!updatingOnQueue"
                         item-text="name"
-                        item-value="_id.$oid"
+                        item-value="id"
                         placeholder="Listen Associado"
                         label="Listen"                                                       
                         dense      
@@ -116,7 +116,7 @@ export default {
             this.title = this.getUpdatingItem.file_name
             this.content = this.getUpdatingItem.content
             if(!this.updatingOnQueue){
-                this.selectedListen = this.getUpdatingItem.listen_id.$oid
+                this.selectedListen = this.getUpdatingItem.listenid
             }
         }
     },
@@ -127,7 +127,7 @@ export default {
             if (this.$refs.form.validate()) {
                 
                 if (this.updatingOnQueue){
-                    this.$axios.put(`/queued_tasks/${this.getUpdatingItem._id.$oid}`, {
+                    this.$axios.put(`/queued_tasks/${this.getUpdatingItem.id}`, {
                         task:{
                             file_name: this.title,
                             content: this.content
@@ -171,7 +171,7 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/task/${this.getUpdatingItem._id.$oid}`, {
+                    this.$axios.put(`/task/${this.getUpdatingItem.id}`, {
                         task:{
                             file_name: this.title,
                             content: this.content                         

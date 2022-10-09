@@ -8,16 +8,16 @@
                 <v-card-text class="pt-0">
                         <v-text-field
                         label="Api Token"
-                        v-model="telegram.token"
-                        :rules="tokenRules"                    
+                        v-model="user.telegram_token"
+                        :rules="telegram_tokenRules"                    
                         required
                         color="white"
                         ></v-text-field>
                         
                         <v-text-field
-                        label="chat_id"
-                        v-model="telegram.chat_id"
-                        :rules="chat_idRules"
+                        label="Chat Id"
+                        v-model="user.telegram_chatid"
+                        :rules="telegram_chatidRules"
                         required
                         color="white"
                         placeholder="0000000000"
@@ -67,12 +67,12 @@ import {mapGetters, mapMutations} from "vuex"
 export default {
     data: () => ({
         valid: true,
-        telegram:{
-            chat_id:null,
-            token:null
+        user:{
+            telegram_chatid:null,
+            telegram_token:null
         },
-        tokenRules: [v => !!v || "Token is required"],        
-        chat_idRules: [v => !!v || "Chat-id is required"],                
+        telegram_tokenRules: [v => !!v || "telegram_Token is required"],        
+        telegram_chatidRules: [v => !!v || "Chat-id is required"],                
     }),
 
     methods: {
@@ -83,9 +83,7 @@ export default {
             if (this.$refs.form.validate()) {
                 if (!this.getUpdatingItem){
                     this.$axios.post("/user/", {
-                        profile:{
-                            telegram: this.telegram
-                        }
+                        user: this.user
                     }).then(response => {
                         
                         this.setSnackBar({
@@ -98,10 +96,8 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/user/${this.getUserSettings._id.$oid}`, {
-                        profile:{
-                            telegram: this.telegram
-                        }
+                    this.$axios.put(`/user/${this.getUserSettings.id}`, {
+                        user: this.user
                     }).then(response => {
                         
                         this.setSnackBar({
@@ -129,8 +125,8 @@ export default {
     created(){
         // console.log(this.$store.state)
         if(this.getUserSettings){
-            this.telegram.token = this.getUserSettings.telegram.token
-            this.telegram.chat_id = this.getUserSettings.telegram.chat_id
+            this.user.telegram_token = this.getUserSettings.user.telegram_token
+            this.user.telegram_chatid = this.getUserSettings.user.telegram_chatid
         }
     },
 

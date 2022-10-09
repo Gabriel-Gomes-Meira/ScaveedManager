@@ -184,11 +184,11 @@ export default {
         }), 
 
         destroy(){
-            // console.log(this.deletingItem, this.deletingItem._id.$oid)
-            let ide = this.deletingItem._id.$oid
+            // console.log(this.deletingItem, this.deletingItem.id)
+            let ide = this.deletingItem.id
             this.$axios.delete(`${this.ModelApi}${ide}`)
                 .then(() =>{
-                    let index = this.Data.findIndex(ele => ele._id.$oid == ide)
+                    let index = this.Data.findIndex(ele => ele.id == ide)
                     this.$emit('remove', index)
                     this.deletingItem = null
 
@@ -208,7 +208,7 @@ export default {
 
         clone(item){
             let cp_item = Object.create(item);            
-            cp_item._id = undefined            
+            cp_item.id = undefined            
             this.setUpdatingItem(cp_item)
             this.$router.push(this.ViewCreate)
         }

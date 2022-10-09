@@ -64,7 +64,7 @@
                             
                             <v-btn
                             v-show="isExpanded(item)"                                            
-                            @click="dialogid = item._id.$oid"              
+                            @click="dialogid = item.id"              
                             icon
                             small
                             class="white"
@@ -92,7 +92,7 @@
                         </v-toolbar>
 
                         <confirmation-dialog
-                        :active="dialogid == item._id.$oid"                
+                        :active="dialogid == item.id"                
                         @Closethis="dialogid = ''"
                         @SendRequest="flushSet(item)"
                         >
@@ -109,7 +109,7 @@
                             style="overflow-x:auto">
                                 <v-expansion-panel
                                 v-for="(register,index) in item.registers"
-                                :key="`${index}_expansion_${item._id.$oid}`"
+                                :key="`${index}_expansion_${item.id}`"
                                 >
                                 <v-expansion-panel-header>
                                     Registrado em {{ register.created_at | formatedDate}}
@@ -165,7 +165,7 @@ export default {
             })
         },
         flushSet(item){
-            this.$axios.delete(`/reports/clean/${item._id.$oid}`).then(resp => {
+            this.$axios.delete(`/reports/clean/${item.id}`).then(resp => {
                 this.setSnackBar({
                         active:true,
                         timeout:2000,
