@@ -123,10 +123,10 @@ export default {
     },
 
     created(){
-        // console.log(this.$store.state)
+        // console.log(this.getUserSettings)
         if(this.getUserSettings){
-            this.user.telegram_token = this.getUserSettings.user.telegram_token
-            this.user.telegram_chatid = this.getUserSettings.user.telegram_chatid
+            this.user.telegram_token = this.getUserSettings.telegram_token
+            this.user.telegram_chatid = this.getUserSettings.telegram_chatid
         }
     },
 

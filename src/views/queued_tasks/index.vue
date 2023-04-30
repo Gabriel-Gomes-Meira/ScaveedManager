@@ -116,10 +116,10 @@
 
         <v-row v-else
         class="mb-0 ">
-            <v-alert type="warning" class="col-12
-            my-0
+            <v-alert class="col-12
+            my-0 blue-grey darken-2
             " tile>
-                Não há tarefas na fila!
+                <v-icon> mdi-exclamation </v-icon> Não há tarefas na fila!
             </v-alert>
         </v-row>
 
@@ -128,7 +128,7 @@
         >
             <v-toolbar            
             dense
-            color="blue-grey darken-1"
+            color="blue-grey darken-3"
             class="pl-2 pr-4 rounded-b-lg elevation-1" />
         </v-row>
     </v-container>

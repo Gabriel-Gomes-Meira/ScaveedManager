@@ -128,14 +128,14 @@
         </template>
 
         <template v-slot:no-data>
-            <v-row
-            class="mb-0 ">
-                <v-alert type="warning" class="col-12
-                my-0
+            <!-- <v-row
+            class="mb-0 "> -->
+                <v-alert class="col-12
+                my-0 rounded-0 blue-grey darken-2
                 ">
-                    Nenhum relatório registrado dos listens ainda....
+                    <v-icon> mdi-exclamation </v-icon> Nenhum relatório registrado dos listens ainda....
                 </v-alert>
-            </v-row>
+            <!-- </v-row> -->
         </template>
     </v-data-iterator>
 </template>

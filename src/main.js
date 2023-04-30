@@ -7,7 +7,7 @@ import '@babel/polyfill'
 import Axios from 'axios'
 
 Vue.config.productionTip = false
-Axios.defaults.baseURL = 'http://192.168.100.175:3000';
+Axios.defaults.baseURL = `http://${process.env.VUE_APP_BACK_SERVER_ADDRESS}:3000`;
 Vue.prototype.$axios = Axios
 new Vue({
   router,
