@@ -105,6 +105,10 @@ export default {
             icon: "mdi-calendar-check-outline",
             title: "Tasks",
             to:"/history/tasks"
+          },{
+            title: "Logs",
+            icon: "mdi-file-document-outline",
+            to: "/history/logs"
           }]
         };
     },

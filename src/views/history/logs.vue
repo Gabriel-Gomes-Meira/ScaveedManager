@@ -10,7 +10,7 @@
                 class="pl-2 pr-4 rounded-t-lg"
                 elevation="0"
                 >
-                    <v-toolbar-title>Relatórios das Tasks</v-toolbar-title>
+                    <v-toolbar-title>Logs de erros e eventos</v-toolbar-title>
                     <v-spacer></v-spacer>
                     
                     <v-btn                   
@@ -52,26 +52,13 @@
                         :key="`${index}_expansion_${item.id}`"
                         >
                         <v-expansion-panel-header>
-                            {{ item.file_name}}
-                            <br>
-                            Concluído em {{ item.terminated_at | formatedDate}}
+                            Horário do evento : {{ item.at | formatedDate}}                              
                         </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                            Inicio da Execução em {{ item.initialized_at | formatedDate}}  
-                            <v-divider />
-                            <br>
-                            {{item.count_erro?`Quantidade de falhas: ${item.count_erro}`:""}}
-                            <v-divider v-if="item.count_erro" />
-                            <br v-if="item.count_erro">
-                            Logs:
-                            <br>
-                            <pre>{{item.log}}</pre>
-                            <v-divider />
-                            <br>
-                            Conteúdo do arquivo:
+                        <v-expansion-panel-content>                                                        
+                            Mensagem:
                             <br>
                             <v-textarea
-                            :value="item.content"
+                            :value="item.message_log"
                             readonly
                             auto-grow
                             no-resize
@@ -103,7 +90,7 @@ import {mapMutations} from "vuex"
 import moment from "moment"
 
 export default {
-    name:"tasks",
+    name:"logs",
 
     data:() => ({
         Data:[],        
@@ -116,7 +103,7 @@ export default {
             setSnackBar: "setSnackBar"
         }),
         feedData(){
-            this.$axios.get('/tasks/history').then(response => {
+            this.$axios.get('/logs').then(response => {                
                 this.Data = response.data                
                 setTimeout(this.stopLoading, 750)    
             })
@@ -131,8 +118,7 @@ export default {
 
     filters: {
         formatedDate(value){
-            if (value) {
-                // return moment(String(value)).format('MM/DD/YYYY hh:mm')
+            if (value) {                
                 return moment(String(value)).locale('pt-br').format('LLL')                
             }
         },
@@ -162,8 +148,7 @@ export default {
         border-radius: 4px;
     }
     .scrollalbe_y::-webkit-scrollbar-thumb{
-        background: #263238;
-        /* border: solid #e0f2f127; */
+        background: #263238;        
         border-radius: 4px;
     }
 

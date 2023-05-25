@@ -22,6 +22,10 @@ const routes = [
     name: 'history-tasks',    
     component: () => import( '../views/history/tasks.vue')
   },{
+    path: '/history/logs',
+    name: 'history-logs',    
+    component: () => import( '../views/history/logs.vue')
+  },{
     path: '/sites',
     name: 'sites',    
     component: () => import( '../views/sites/')
