@@ -6,60 +6,61 @@
         <v-row justify="center">
             <v-card class="col-8 align-center">
                 <v-card-text class="pt-0">
-                        <!-- <v-text-field
-                        label="Title"
-                        v-model="title"
-                        :rules="titleRules"
-                        :counter="150"
-                        required
-                        color="white"
-                        ></v-text-field> -->
-                        
-                        <v-file-input
-                        :rules="fileRules"
-                        accept=".rb"
-                        placeholder="Up your File"
-                        prepend-icon="mdi-text"
-                        label="Script"
-                        v-model="file"
-                        @change="readContent"
-                        ></v-file-input>
 
-                        <v-autocomplete 
-                        v-show="!updatingOnQueue"
-                        item-text="name"
-                        item-value="id"
-                        placeholder="Listen Associado"
-                        label="Listen"                                                       
-                        dense      
-                        :rules="listenRules"                              
-                        :items="listens"
-                        v-model="selectedListen"            
-                        />
-                
-                        <v-row 
-                        class="mt-2 px-4">
-                            <v-btn
-                                large
-                                text
-                                @click="submit"
-                                :disabled="!valid || processingFile"
-                                class="light-green"
-                            >
-                                <v-icon
-                                size="36">
-                                    mdi-content-save-outline
-                                </v-icon>
-                            </v-btn>
-                            <v-spacer></v-spacer>                            
-                            <v-btn
-                            class="red darken-4 ml-4" 
+                    <v-file-input
+                    placeholder="Selecione o arquivo de configuração"
+                    prepend-icon="mdi-text"
+                    label="Arquivo de Configuração"
+                    v-model="presetFile"
+                    @change="readPresetContent"
+                    ></v-file-input>
+                        
+                    <v-file-input
+                    :rules="taskRules"
+                    accept=".rb"
+                    placeholder="Selecione o arquivo do script"
+                    prepend-icon="mdi-text"
+                    label="Script"
+                    v-model="fileTask"
+                    @change="readContent"
+                    ></v-file-input>
+
+                    <v-autocomplete 
+                    v-show="!updatingOnQueue"
+                    item-text="name"
+                    item-value="id"
+                    placeholder="Listen Associado"
+                    label="Listen"                                                       
+                    dense      
+                    :rules="listenRules"                              
+                    :items="listens"
+                    v-model="selectedListen"            
+                    />
+            
+                    <v-row 
+                    class="mt-2 px-4">
+                        <v-btn
                             large
-                            @click="$router.back()">
-                                <v-icon
-                                size="38">mdi-arrow-left</v-icon>
-                            </v-btn>                 
-                        </v-row>
+                            text
+                            @click="submit"
+                            :disabled="!valid || processingFile"
+                            class="light-green"
+                        >
+                            <v-icon
+                            size="36">
+                                mdi-content-save-outline
+                            </v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>                            
+                        <v-btn
+                        class="red darken-4 ml-4" 
+                        large
+                        @click="$router.back()">
+                            <v-icon
+                            size="38">mdi-arrow-left</v-icon>
+                        </v-btn>                 
+                    </v-row>
+
                 </v-card-text>        
             </v-card>
         </v-row>        
@@ -75,10 +76,12 @@ export default {
 
     data() {
         return {
-            fileRules:[v => !!v || "Arquivo do script é obrigatório.",
-                            v => v == null || v.type == "application/x-ruby" || "Tipo não adequado!!"],
-            file:null,
+            taskRules:[v => !!v || "Arquivo do script é obrigatório.",
+                            v => v == null || v.type == "application/x-ruby" || "Tipo não adequado!!"],            
+            fileTask:null,
             content:"",
+            presetFile:null,
+            presetContent:"",
             title:"",
             textRules:[v => !!v || "Script em branco!"],
             listens:[],
@@ -154,7 +157,8 @@ export default {
                     this.$axios.post("/tasks/", {
                         task:{
                             file_name: this.title,
-                            content: this.content
+                            content: this.content,
+                            preset_content: this.presetContent
                         },
                         listen: {
                             id: this.selectedListen
@@ -174,7 +178,8 @@ export default {
                     this.$axios.put(`/tasks/${this.getUpdatingItem.id}`, {
                         task:{
                             file_name: this.title,
-                            content: this.content                         
+                            content: this.content,
+                            preset_content: this.presetContent
                         },
                         listen: {
                             id: this.selectedListen
@@ -206,6 +211,14 @@ export default {
                 this.processingFile = false
             })
         },
+
+        readPresetContent(e) {
+            this.processingFile = true;
+            e.text().then(content => {
+                this.presetContent = content;
+                this.processingFile = false;
+            })
+        }
         
     }
         
