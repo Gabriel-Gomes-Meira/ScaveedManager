@@ -8,9 +8,17 @@
                 <v-toolbar-title>Queue</v-toolbar-title>
                 <v-spacer></v-spacer>
                 
+                <v-checkbox
+                v-model="syncronizing"
+                label="Sincronizado"
+                class="mt-5 mr-4"
+                />                    
+                
+
                 <v-btn                   
                 @click="feedData()"              
-                icon>
+                icon
+                :disabled="syncronizing">
                     <v-icon                
                     size="33">mdi-restore</v-icon>
                 </v-btn>
@@ -31,12 +39,19 @@
                         <v-list-item-avatar>
                             <v-tooltip top>
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-icon
+                                    
+                                    <v-icon v-if="task.state =! 1"
                                     :color="status[task.state].color"
                                     dark v-text="status[task.state].icon"
                                     v-bind="attrs"
                                     v-on="on"                        
-                                    />
+                                    /> 
+                                    <v-progress-circular v-else
+                                    indeterminate
+                                    color="green"
+                                    size="10"        
+                                    v-show="true"
+                                    ></v-progress-circular>
                                 </template>
 
                                 <span> 
@@ -46,21 +61,27 @@
                         </v-list-item-avatar>
 
                         <v-list-item-content>
-                            <v-list-item-title v-text="task.file_name"></v-list-item-title>
-
+                            <v-list-item-title v-text="task.file_name" />
 
                             <v-list-item-subtitle >
                                 Atualizado em {{task.updated_at | formatedDate()}}                                
-                            </v-list-item-subtitle>
+                            </v-list-item-subtitle>                            
 
-                            <v-list-item-subtitle v-if="task.count_erro">                                
+                            <v-list-item-subtitle v-if="task.message_error">                                
                                 <v-card
-                                color="red lighten-1">
+                                color="red darken-1">
                                 Falhou {{task.count_erro}} veze(s) em executar!
                                 <br>
                                 Motivo do erro:
-                                    {{task.log}}
+                                    {{task.message_error}}
                                 </v-card>                                
+                            </v-list-item-subtitle>
+
+                            <v-list-item-subtitle v-if="task.state == 1">
+                                <v-card
+                                color="blue-grey darken-2">
+                                    {{task.log}}
+                                </v-card>                            
                             </v-list-item-subtitle>
                             
                         </v-list-item-content>
@@ -137,7 +158,7 @@
 <script>
 import moment from "moment"
 import confirmationDialog from "@/components/confirmationDialog.vue"
-import {mapMutations} from "vuex"
+import {mapMutations, mapActions, mapGetters} from "vuex"
 export default {
     data: () => ({
         tasks:[],
@@ -158,17 +179,41 @@ export default {
                 description:"Terminated"
             },
         ],
-        dialogid: "",        
+        dialogid: "",             
     }),    
+
+    computed:{
+        syncronizing: {
+            get(){
+                return this.getSyncronizing
+            },
+            set(value){
+                this.setSyncronizing(value)
+            }
+        },
+        ...mapGetters({
+            getSyncronizing: "getSyncronizing",
+        }),
+    },
 
     created(){
         this.feedData()
+        this.initSyncronizing()
+        setInterval(() => {
+            if (this.getSyncronizing) {
+                this.feedData()
+            }
+        }, 1000);              
     },
 
     methods:{
         ...mapMutations({
           setSnackBar: "setSnackBar",
           setUpdatingItem: "setUpdatingItem",
+        }),
+        ...mapActions({
+            setSyncronizing: "setSyncronizing",
+            initSyncronizing: "initSyncronizing",
         }),
         dequeue(task){
             this.$axios.delete(`/queued_tasks/${this.dialogid}`).then(() => {
@@ -191,10 +236,9 @@ export default {
         },
         feedData(){
             this.$axios.get('/queued_tasks/').then(response => {
-                this.tasks = response.data       
-                console.log(response.data)         
+                this.tasks = response.data                
             })
-        }
+        },        
     },
 
     components: { confirmationDialog },
