@@ -107,15 +107,12 @@
             </v-sheet>
         </template>
 
-        <template v-slot:no-data>
-            <v-row
-            class="mb-0 ">
-                <v-alert type="warning" class="col-12
-                my-0
-                ">
-                    Nenhum relatório registrado dos listens ainda....
-                </v-alert>
-            </v-row>
+        <template v-slot:no-data>            
+            <v-alert class="col-12
+            my-0 blue-grey darken-2
+            " tile>
+                Nenhum relatório registrado das tarefas...
+            </v-alert>            
         </template>
     </v-data-iterator>
 </template>

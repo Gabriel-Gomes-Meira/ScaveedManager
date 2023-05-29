@@ -12,6 +12,20 @@
                 >
                     <v-toolbar-title>Logs de erros e eventos</v-toolbar-title>
                     <v-spacer></v-spacer>
+
+                    <v-btn
+                    @click="getPreviousPage()"
+                    icon
+                    :disabled="!hasPreviousPage">
+                        <v-icon size="25">mdi-arrow-left</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                    @click="getNextPage()"
+                    icon
+                    :disabled="!hasNextPage">
+                        <v-icon size="25">mdi-arrow-right</v-icon>
+                    </v-btn>
                     
                     <v-btn                   
                     @click="feedData()"              
@@ -72,15 +86,12 @@
             </v-sheet>
         </template>
 
-        <template v-slot:no-data>
-            <v-row
-            class="mb-0 ">
-                <v-alert type="warning" class="col-12
-                my-0
-                ">
-                    Nenhum relatório registrado dos listens ainda....
-                </v-alert>
-            </v-row>
+        <template v-slot:no-data>            
+            <v-alert class="col-12
+            my-0 blue-grey darken-2
+            " tile>
+                Nenhum relatório registrado de eventos...
+            </v-alert>            
         </template>
     </v-data-iterator>
 </template>
@@ -94,7 +105,21 @@ export default {
 
     data:() => ({
         Data:[],        
+        page:1,
+        countPerPage:10,
+        totalPages:-1,
     }),
+
+    computed: {
+        // has next page?
+        hasNextPage() {
+            return this.page < this.totalPages
+        },
+        // has previous page?
+        hasPreviousPage() {
+            return this.page > 1
+        },                
+    },
 
     methods:{
         ...mapMutations({
@@ -103,11 +128,24 @@ export default {
             setSnackBar: "setSnackBar"
         }),
         feedData(){
-            this.$axios.get('/logs').then(response => {                
-                this.Data = response.data                
+            this.$axios.get(`/logs?page=${this.page}&per_page=${this.countPerPage}`).then(response => {                
+                this.Data = response.data.items            
+                this.totalPages = response.data.pagination.total_pages
                 setTimeout(this.stopLoading, 750)    
             })
-        },        
+        },    
+        getPreviousPage() {
+            if (this.hasPreviousPage) {
+                this.page--
+                this.feedData()
+            }
+        },
+        getNextPage() {
+            if (this.hasNextPage) {
+                this.page++
+                this.feedData()
+            }
+        },    
     },
 
     created(){
