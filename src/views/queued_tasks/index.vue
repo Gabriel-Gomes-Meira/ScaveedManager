@@ -26,10 +26,10 @@
         </v-row>
         
         <v-row v-if="tasks.length>0"
-        class="mt-3 mb-0">
+        class="mt-3 mb-0 scrollalbe_y">
             <v-card tile
             color=""
-            class="py-2 px-0 col-12">
+            class="px-0 col-12">
                 
                 <v-row >
                     <v-list-item
@@ -40,17 +40,21 @@
                             <v-tooltip top>
                                 <template v-slot:activator="{ on, attrs }">
                                     
-                                    <v-icon v-if="task.state =! 1"
+                                    <v-icon v-if="task.state != 1"
                                     :color="status[task.state].color"
-                                    dark v-text="status[task.state].icon"
+                                    dark 
                                     v-bind="attrs"
                                     v-on="on"                        
-                                    /> 
+                                    > 
+                                        {{status[task.state].icon}}
+                                    </v-icon>
                                     <v-progress-circular v-else
                                     indeterminate
                                     color="green"
                                     size="10"        
                                     v-show="true"
+                                    v-bind="attrs"
+                                    v-on="on"  
                                     ></v-progress-circular>
                                 </template>
 
@@ -80,7 +84,9 @@
                             <v-list-item-subtitle v-if="task.state == 1">
                                 <v-card
                                 color="blue-grey darken-2">
-                                    {{task.log}}
+                                    <pre class="scrollable_pre">
+                                        {{task.log}}
+                                    </pre>
                                 </v-card>                            
                             </v-list-item-subtitle>
                             
@@ -254,5 +260,44 @@ export default {
 </script>
 
 <style>
+    .scrollalbe_y{
+        max-height:70vh;        
+        overflow-y:auto;
+        overflow-x: hidden;        
+    }
+
+    .scrollalbe_y::-webkit-scrollbar{        
+        width: 8px;
+    }
+    .scrollalbe_y::-webkit-scrollbar-track{
+        
+        background-color: transparent;
+        border-radius: 4px;
+    }
+    .scrollalbe_y::-webkit-scrollbar-thumb{
+        background: #263238;
+        /* border: solid #e0f2f127; */
+        border-radius: 4px;
+    }
+
+    .scrollable_pre{
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .scrollable_pre::-webkit-scrollbar{        
+        width: 8px;
+    }
+    .scrollable_pre::-webkit-scrollbar-track{
+        
+        background-color: transparent;
+        border-radius: 4px;
+    }
+    .scrollable_pre::-webkit-scrollbar-thumb{
+        background: #263238;
+        /* border: solid #e0f2f127; */
+        border-radius: 4px;
+    }
 
 </style>
