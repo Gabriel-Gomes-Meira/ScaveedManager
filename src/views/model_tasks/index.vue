@@ -61,6 +61,10 @@ export default {
                 value: "listen_name",
                 align: 'center'
             },{
+                text: "Cron",
+                value: "cron_name",
+                align: 'center'
+            },{
                 text: "File Name",
                 value: "file_name",
                 align: 'center'

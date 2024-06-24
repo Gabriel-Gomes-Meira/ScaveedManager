@@ -36,6 +36,18 @@
                     :items="listens"
                     v-model="selectedListen"            
                     />
+
+                    <v-autocomplete 
+                    v-show="!updatingOnQueue"
+                    item-text="name"
+                    item-value="id"
+                    placeholder="Cron Associado"
+                    label="Cron"           
+                    dense      
+                    :rules="cronRules"                              
+                    :items="crons"
+                    v-model="selectedCron"            
+                    />
             
                     <v-row 
                     class="mt-2 px-4">
@@ -85,7 +97,9 @@ export default {
             title:"",
             textRules:[v => !!v || "Script em branco!"],
             listens:[],
+            crons:[],
             selectedListen:null,
+            selectedCron:null,
             valid:false,
             processingFile:false
         }
@@ -97,7 +111,7 @@ export default {
         ]),
 
         updatingOnQueue(){
-            return this.updating && !!!this.getUpdatingItem.listen_id
+            return this.updating && !!!this.getUpdatingItem.listen_id && !!!this.getUpdatingItem.cron_id
         },
 
         listenRules(){
@@ -108,6 +122,15 @@ export default {
             }
             return []
         },
+
+        cronRules(){
+            if(this.updating && this.getUpdatingItem.listen_id){
+                return [
+                    v => !!v || "Cron é requerido nessa atualização!"
+                ]
+            }
+            return []
+        }
     },
 
     created(){
@@ -115,11 +138,16 @@ export default {
             this.listens = response.data
         })
 
+        this.$axios.get('/crons/').then(response => {
+            this.crons = response.data
+        })
+
         if(this.getUpdatingItem){
             this.title = this.getUpdatingItem.file_name
             this.content = this.getUpdatingItem.content
             if(!this.updatingOnQueue){
-                this.selectedListen = this.getUpdatingItem.listenid
+                this.selectedListen = this.getUpdatingItem.listen_id
+                this.selectedCron = this.getUpdatingItem.cron_id
             }
         }
     },
@@ -162,8 +190,12 @@ export default {
                         },
                         listen: {
                             id: this.selectedListen
+                        },
+                        cron: {
+                            id: this.selectedCron
                         }
                     }).then(() => {
+                        
                         
                         this.setSnackBar({
                                 active:true,
@@ -183,6 +215,9 @@ export default {
                         },
                         listen: {
                             id: this.selectedListen
+                        },
+                        cron: {
+                            id: this.selectedCron
                         } 
                     }).then(() => {
                         

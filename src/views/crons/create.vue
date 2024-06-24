@@ -6,16 +6,7 @@
         <v-row justify="center">
             <v-card class="col-8 align-center">
                 <v-card-text class="pt-0">
-                    <v-autocomplete 
-                    item-text="name"
-                    item-value="id"
-                    placeholder="Site to Listen"
-                    label="Site"                    
-                    :items="sites"
-                    v-model="selectedSite"
-                    
-                    />
- 
+
                     <v-text-field
                     label="Name"
                     v-model="name"
@@ -23,24 +14,6 @@
                     :counter="150"
                     required
                     color="white"
-                    ></v-text-field>
-                    
-                    <v-text-field
-                    label="URL"
-                    v-model="url"
-                    :rules="urlRules"
-                    required
-                    color="white"
-                    placeholder="https://......../"
-                    ></v-text-field>
-
-                    <v-text-field
-                    label="Indentifier"
-                    v-model="indentifier"
-                    :rules="indentifierRules"
-                    required
-                    color="white"
-                    placeholder="xpath or css"
                     ></v-text-field>
 
                     <v-text-field
@@ -51,6 +24,14 @@
                     color="white"
                     placeholder="Intervalo em segundos de cada requisição"
                     ></v-text-field>
+
+                    <v-text-field
+                    label="Next Run"
+                    v-model="nextRun"                    
+                    required
+                    color="white"
+                    ></v-text-field>
+
             
                     <v-row 
                     class="mt-2 px-4">
@@ -98,28 +79,21 @@ export default {
         valid: true,
         name: "",
         nameRules: [v => !!v || "Name is required", 
-                    v => (v && v.length <= 150) || "Name must be less than 150 characters"],
-        url: "",
-        urlRules: [v => !!v || "URL is required", v => /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(v) || "URL must be valid"],
-        indentifier:"",
-        indentifierRules: [v => !!v || "Indetifier for dom element is required!"],
-        selectedSite:null,
-        sites:[],
+                    v => (v && v.length <= 150) || "Name must be less than 150 characters"],           
         interval: 1,
-        intervalRules: [v => !!v || "Interval is required", v => (v && v > 0) || "Interval must be greater than 0"]
+        intervalRules: [v => !!v || "Interval is required", v => (v && v > 0) || "Interval must be greater than 0"],
+        nextRun: ""
     }),
 
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
                 if (!this.updating){
-                    this.$axios.post("/listens/", {
-                        listen:{
+                    this.$axios.post("/crons/", {
+                        cron:{
                             name: this.name,
-                            url: this.url,                    
-                            element_indentifier: this.indentifier,
-                            site_id: this.selectedSite,
-                            interval: this.interval
+                            interval: this.interval,
+                            next_run: this.nextRun
                         },                        
                     }).then(response => {
                         
@@ -133,13 +107,11 @@ export default {
                     })
 
                 } else {
-                    this.$axios.put(`/listens/${this.getUpdatingItem.id}`, {
-                        listen:{
+                    this.$axios.put(`/crons/${this.getUpdatingItem.id}`, {
+                        cron:{
                             name: this.name,
-                            url: this.url,                    
-                            element_indentifier: this.indentifier,
-                            site_id: this.selectedSite,
-                            interval: this.interval
+                            interval: this.interval,
+                            next_run: this.nextRun
                         },                        
                     }).then(response => {
                         
@@ -173,17 +145,10 @@ export default {
     created(){
 
         if(this.getUpdatingItem){            
-            this.name = this.getUpdatingItem.name
-            this.url = this.getUpdatingItem.url
-            this.indentifier = this.getUpdatingItem.element_indentifier
-            this.selectedSite = this.getUpdatingItem.siteid
+            this.name = this.getUpdatingItem.name            
             this.interval = this.getUpdatingItem.interval
+            this.nextRun = this.getUpdatingItem.next_run
         }
-
-        this.$axios.get('/sites/').then(response => {
-            this.sites = response.data
-        })
-
     },
     
 };

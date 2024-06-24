@@ -130,6 +130,10 @@ export default {
                 title: "Listens",
                 icon: "mdi-message-alert-outline",
                 to: "/listens/",
+            },{
+                title: "Crons",
+                icon: "mdi-alarm",
+                to: "/crons/",
             }]
           if(this.userSetted){
             list.push({
