@@ -61,7 +61,15 @@ const routes = [
     path: '/queued_tasks/',
     name: 'queued_tasks',    
     component: () => import( '../views/queued_tasks/')
-  }
+  },{
+    path: '/crons',
+    name: 'crons',    
+    component: () => import( '../views/crons/')
+  },{
+    path: '/crons/create',
+    name: 'cron-create',    
+    component: () => import( '../views/crons/create')
+  },
 ]
 
 const router = new VueRouter({

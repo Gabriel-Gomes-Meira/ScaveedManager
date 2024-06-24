@@ -13,7 +13,8 @@ const store = new Vuex.Store({
                 message:"",
                 color:"black",
                 timeout:2000
-            }
+            },
+            syncronizing: false,
         }
     },
 
@@ -40,6 +41,10 @@ const store = new Vuex.Store({
     
         getSnackBar(state){
             return state.snackConfig
+        },
+
+        getSyncronizing(state){
+            return state.syncronizing
         }
     },
 
@@ -69,6 +74,21 @@ const store = new Vuex.Store({
     
         hiddenSnackBar(state){
             state.snackConfig.active = false;
+        },
+
+        setSyncronizing(state, value){
+            state.syncronizing = value
+        }
+    },
+
+    actions: {
+        setSyncronizing({commit}, value){
+            localStorage.setItem("syncronizing", value)            
+            commit("setSyncronizing", value)
+        },
+
+        initSyncronizing(){
+            this.state.syncronizing = localStorage.getItem("syncronizing") == "true"
         }
     }
 

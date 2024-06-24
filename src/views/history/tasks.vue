@@ -1,9 +1,15 @@
 <template>
+
+    <!-- :items-per-page.sync="countPerPage"
+    :page.sync="page" -->
+    <!-- Desabilitei a paginação pois o data iterator simplesmente não mudava de páginas -->
   <v-data-iterator
       :items="Data"      
       :single-expand="true"
-      hide-default-footer
+      hide-default-footer                  
+      disable-pagination
     >
+
         <template v-slot:header>            
                 <v-toolbar
                 color="blue-grey darken-3"
@@ -12,6 +18,21 @@
                 >
                     <v-toolbar-title>Relatórios das Tasks</v-toolbar-title>
                     <v-spacer></v-spacer>
+
+                    <v-btn
+                    @click="getPreviousPage()"
+                    icon
+                    :disabled="!hasPreviousPage">
+                        <v-icon size="25">mdi-arrow-left</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                    @click="getNextPage()"
+                    icon
+                    :disabled="!hasNextPage">
+                        <v-icon size="25">mdi-arrow-right</v-icon>
+                    </v-btn>
+
                     
                     <v-btn                   
                     @click="feedData()"              
@@ -36,23 +57,24 @@
                 </v-toolbar>
         </template>
 
-        <template v-slot:default="{ items}">
+        <template v-slot:default="props">
 
             <v-sheet
             color=""
             dark
             class="px-4 pt-3 pb-1 
             scrollalbe_y"
+            :key="`${props.pagination.page}_pagina`"
             >
                 <v-row>
                     
                     <v-expansion-panels>
                         <v-expansion-panel
-                        v-for="(item,index) in items"
-                        :key="`${index}_expansion_${item.id}`"
+                        v-for="(item) in props.items"
+                        :key="item.id"
                         >
                         <v-expansion-panel-header>
-                            {{ item.file_name}}
+                            {{ item.file_name}} {{ item.id }}
                             <br>
                             Concluído em {{ item.terminated_at | formatedDate}}
                         </v-expansion-panel-header>
@@ -85,15 +107,12 @@
             </v-sheet>
         </template>
 
-        <template v-slot:no-data>
-            <v-row
-            class="mb-0 ">
-                <v-alert type="warning" class="col-12
-                my-0
-                ">
-                    Nenhum relatório registrado dos listens ainda....
-                </v-alert>
-            </v-row>
+        <template v-slot:no-data>            
+            <v-alert class="col-12
+            my-0 blue-grey darken-2
+            " tile>
+                Nenhum relatório registrado das tarefas...
+            </v-alert>            
         </template>
     </v-data-iterator>
 </template>
@@ -106,8 +125,22 @@ export default {
     name:"tasks",
 
     data:() => ({
-        Data:[],        
+        Data:[],
+        countPerPage: 10,
+        totalPages: -1,
+        page: 1,
     }),
+
+    computed: {
+        // has next page?
+        hasNextPage() {
+            return this.page < this.totalPages
+        },
+        // has previous page?
+        hasPreviousPage() {
+            return this.page > 1
+        },                
+    },
 
     methods:{
         ...mapMutations({
@@ -115,12 +148,26 @@ export default {
             startLoading: "startLoading",
             setSnackBar: "setSnackBar"
         }),
+
         feedData(){
-            this.$axios.get('/tasks/history').then(response => {
-                this.Data = response.data                
+            this.$axios.get(`/tasks/history?page=${this.page}&per_page=${this.countPerPage}`).then(response => {
+                this.Data = response.data.items               
+                this.totalPages = response.data.pagination.total_pages
                 setTimeout(this.stopLoading, 750)    
             })
-        },        
+        },          
+        getPreviousPage() {
+            if (this.hasPreviousPage) {
+                this.page--
+                this.feedData()
+            }
+        },
+        getNextPage() {
+            if (this.hasNextPage) {
+                this.page++
+                this.feedData()
+            }
+        },      
     },
 
     created(){
@@ -136,11 +183,6 @@ export default {
                 return moment(String(value)).locale('pt-br').format('LLL')                
             }
         },
-        scriptedFormat(value){
-            if (value) {
-                return value.join('\n')
-            }
-        }
     }
 
 }

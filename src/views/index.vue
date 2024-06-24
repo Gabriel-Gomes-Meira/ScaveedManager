@@ -17,7 +17,11 @@
  
  <script>
  export default {
- 
+ 	created() {
+		setInterval(() => {
+	  		console.log(sessionStorage)
+		}, 300)
+	}
  }
  </script>
  
