@@ -77,7 +77,10 @@
                                 Falhou {{task.count_erro}} veze(s) em executar!
                                 <br>
                                 Motivo do erro:
+                                <br>
+                                <pre>                                    
                                     {{task.message_error}}
+                                </pre>
                                 </v-card>                                
                             </v-list-item-subtitle>
 
