@@ -32,6 +32,12 @@
                     color="white"
                     ></v-text-field>
 
+                    <v-text-field
+                    label="Parâmetros"
+                    v-model="params"                    
+                    required
+                    color="white"
+                    ></v-text-field>
             
                     <v-row 
                     class="mt-2 px-4">
@@ -82,7 +88,8 @@ export default {
                     v => (v && v.length <= 150) || "Name must be less than 150 characters"],           
         interval: 1,
         intervalRules: [v => !!v || "Interval is required", v => (v && v > 0) || "Interval must be greater than 0"],
-        nextRun: ""
+        nextRun: "",
+        params: "",
     }),
 
     methods: {
@@ -93,7 +100,8 @@ export default {
                         cron:{
                             name: this.name,
                             interval: this.interval,
-                            next_run: this.nextRun
+                            next_run: this.nextRun,
+                            params: this.params
                         },                        
                     }).then(response => {
                         
@@ -111,7 +119,8 @@ export default {
                         cron:{
                             name: this.name,
                             interval: this.interval,
-                            next_run: this.nextRun
+                            next_run: this.nextRun,
+                            params: this.params
                         },                        
                     }).then(response => {
                         
@@ -148,6 +157,7 @@ export default {
             this.name = this.getUpdatingItem.name            
             this.interval = this.getUpdatingItem.interval
             this.nextRun = this.getUpdatingItem.next_run
+            this.params = this.getUpdatingItem.params
         }
     },
     

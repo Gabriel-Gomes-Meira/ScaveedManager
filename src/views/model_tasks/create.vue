@@ -25,6 +25,14 @@
                     @change="readContent"
                     ></v-file-input>
 
+                    <v-text-field
+                    v-show="updatingOnQueue"
+                    label="Parâmetros"
+                    v-model="params"                    
+                    required
+                    color="white"
+                    ></v-text-field>
+
                     <v-autocomplete 
                     v-show="!updatingOnQueue"
                     item-text="name"
@@ -42,11 +50,12 @@
                     item-text="name"
                     item-value="id"
                     placeholder="Cron Associado"
-                    label="Cron"           
+                    label="Cron"
+                    multiple           
                     dense      
                     :rules="cronRules"                              
                     :items="crons"
-                    v-model="selectedCron"            
+                    v-model="selectedCrons"            
                     />
             
                     <v-row 
@@ -99,9 +108,10 @@ export default {
             listens:[],
             crons:[],
             selectedListen:null,
-            selectedCron:null,
+            selectedCrons:[],
             valid:false,
-            processingFile:false
+            processingFile:false,
+            params: null
         }
     },
 
@@ -111,7 +121,7 @@ export default {
         ]),
 
         updatingOnQueue(){
-            return this.updating && !!!this.getUpdatingItem.listen_id && !!!this.getUpdatingItem.cron_id
+            return this.updating && !!!this.getUpdatingItem.listen_id && !!!this.getUpdatingItem.crons
         },
 
         listenRules(){
@@ -145,9 +155,12 @@ export default {
         if(this.getUpdatingItem){
             this.title = this.getUpdatingItem.file_name
             this.content = this.getUpdatingItem.content
+            this.presetContent = this.getUpdatingItem.preset_content
             if(!this.updatingOnQueue){
                 this.selectedListen = this.getUpdatingItem.listen_id
-                this.selectedCron = this.getUpdatingItem.cron_id
+                for (let cron of this.getUpdatingItem.crons){
+                    this.selectedCrons.push(cron.id)
+                }                
             }
         }
     },
@@ -161,7 +174,9 @@ export default {
                     this.$axios.put(`/queued_tasks/${this.getUpdatingItem.id}`, {
                         task:{
                             file_name: this.title,
-                            content: this.content
+                            content: this.content,
+                            preset_content: this.presetContent,
+                            params: this.params
                         }                        
                     }).then(() => {                        
                         this.setSnackBar({
@@ -192,7 +207,7 @@ export default {
                             id: this.selectedListen
                         },
                         cron: {
-                            id: this.selectedCron
+                            ids: this.selectedCrons
                         }
                     }).then(() => {
                         
@@ -217,7 +232,7 @@ export default {
                             id: this.selectedListen
                         },
                         cron: {
-                            id: this.selectedCron
+                            ids: this.selectedCrons
                         } 
                     }).then(() => {
                         

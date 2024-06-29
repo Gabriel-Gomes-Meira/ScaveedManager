@@ -41,6 +41,13 @@
                 Você tem certeza de que deseja adicionar "<b>{{prop.item.file_name}}</b>" à fila de tarefas?!
                 <br>
                 Saiba que tentar realizar essa ação poderá implicar em duplicação e/ou redundãncia nas suas operações.
+                <br>
+                <v-text-field
+                label="Parâmetros"
+                v-model="params"                    
+                required
+                color="white"
+                ></v-text-field>
             </template>
         </confirmation-dialog>
     </template>
@@ -61,8 +68,8 @@ export default {
                 value: "listen_name",
                 align: 'center'
             },{
-                text: "Cron",
-                value: "cron_name",
+                text: "Crons",
+                value: "crons_names",
                 align: 'center'
             },{
                 text: "File Name",
@@ -75,6 +82,7 @@ export default {
             }],
             Data:[],
             dialogid:"",
+            params:""
         }
     },
 
@@ -94,7 +102,12 @@ export default {
             this.Data.splice(index,1);
         },
         pushQueue(){
-            this.$axios.post(`/queued_tasks/${this.dialogid}`).then(() => {
+            this.$axios.post(`/queued_tasks/${this.dialogid}`, {
+                task:{
+                    params: this.params
+                }
+            
+            }).then(() => {
                 this.setSnackBar({
                         active:true,
                         timeout:2000,
