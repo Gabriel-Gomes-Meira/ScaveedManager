@@ -78,7 +78,7 @@
                                 <br>
                                 Motivo do erro:
                                 <br>
-                                <pre>                                    
+                                <pre class="message-error">                                    
                                     {{task.message_error}}
                                 </pre>
                                 </v-card>                                
@@ -283,7 +283,7 @@ export default {
         border-radius: 4px;
     }
 
-    .scrollable_pre{
+    .{
         max-height: 200px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -302,5 +302,13 @@ export default {
         /* border: solid #e0f2f127; */
         border-radius: 4px;
     }
+
+
+    .message-error{
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    
+    
 
 </style>
